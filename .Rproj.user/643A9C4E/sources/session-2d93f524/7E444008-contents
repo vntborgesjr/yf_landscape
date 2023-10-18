@@ -1,0 +1,16 @@
+metrics <- c(
+  "lsm_c_pland",
+  "lsm_c_np",
+  "lsm_c_ed"
+)
+
+landscape_metrics2000 <- buffer2000 |> 
+  purrr::map(
+  \(.x) calculate_lsm(
+    landscape = .x,
+    what = metrics
+  )
+) |> 
+  purrr::list_rbind()
+
+class(landscape_metrics2000$`1`)

@@ -24,237 +24,123 @@ source(here::here("R/dependencies.R"))
 
 # Obtain all landscape metrics at once -------------------------------------------
 # habitat cover, number of patches, and edge density
+metrics <- c(
+  "lsm_c_pland",
+  "lsm_c_np",
+  "lsm_c_ed"
+)
 
 # buffer of 40m -------------------------------------------
-all_cover_metric40 <- purrr::map2(
-  cover_reclass3,
-  ep_cities_data,
-  \(.x, .y) 
-  # plot_id <- names(.y),
-  sample_lsm(
-    landscape = .x,
-    y = .y,
-    shape = "circle",
-    size = 40, 
-    # plot_id = .y$plot_id$ID,
-    level = "class",
-    metric = c(
-      "pland",
-      "np",
-      "ed"
-    ),
-    name = c(
-      "percentage of landscape",
-      "number of patches",
-      "edge density"
-    ),
-    type = c(
-      "area and edge metric",
-      "aggregation metric",
-      "area and edge metric"
-    ), 
-    what = c(
-      "lsm_c_pland",
-      "lsm_c_np",
-      "lsm_c_ed"
-    ),
-    classes_max = 2, 
-    verbose = FALSE
+landscape_metrics40 <- buffer40 |> 
+  purrr::map(
+    \(.x) calculate_lsm(
+      landscape = .x,
+      what = metrics
+    )
+  ) |> 
+  purrr::list_rbind(
+    names_to = "id"
   )
-)
 
 # Buffer of 100m
-all_cover_metric100 <- purrr::map2(
-  cover_reclass3,
-  ep_cities_data,
-  \(.x, .y) 
-  # plot_id <- names(.y),
-  sample_lsm(
-    landscape = .x,
-    y = .y,
-    shape = "circle",
-    size = 100, 
-    # plot_id = .y$plot_id$ID,
-    level = "class",
-    metric = c(
-      "pland",
-      "np",
-      "ed"
-    ),
-    name = c(
-      "percentage of landscape",
-      "number of patches",
-      "edge density"
-    ),
-    type = c(
-      "area and edge metric",
-      "aggregation metric",
-      "area and edge metric"
-    ), 
-    what = c(
-      "lsm_c_pland",
-      "lsm_c_np",
-      "lsm_c_ed"
-    ),
-    classes_max = 2, 
-    verbose = FALSE
+landscape_metrics100 <- buffer100 |> 
+  purrr::map(
+    \(.x) calculate_lsm(
+      landscape = .x,
+      what = metrics
+    )
+  ) |> 
+  purrr::list_rbind(
+    names_to = "id"
   )
-)
 
 # Buffer of 200m
-all_cover_metric200 <- purrr::map2(
-  cover_reclass3,
-  ep_cities_data,
-  \(.x, .y) 
-  # plot_id <- names(.y),
-  sample_lsm(
-    landscape = .x,
-    y = .y,
-    shape = "circle",
-    size = 200, 
-    # plot_id = .y$plot_id$ID,
-    level = "class",
-    metric = c(
-      "pland",
-      "np",
-      "ed"
-    ),
-    name = c(
-      "percentage of landscape",
-      "number of patches",
-      "edge density"
-    ),
-    type = c(
-      "area and edge metric",
-      "aggregation metric",
-      "area and edge metric"
-    ), 
-    what = c(
-      "lsm_c_pland",
-      "lsm_c_np",
-      "lsm_c_ed"
-    ),
-    classes_max = 2, 
-    verbose = FALSE
+landscape_metrics200 <- buffer200 |> 
+  purrr::map(
+    \(.x) calculate_lsm(
+      landscape = .x,
+      what = metrics
+    )
+  ) |> 
+  purrr::list_rbind(
+    names_to = "id"
   )
-)
 
 # Buffer of 400m
-all_cover_metric400 <- purrr::map2(
-  cover_reclass3,
-  ep_cities_data,
-  \(.x, .y) 
-  # plot_id <- names(.y),
-  sample_lsm(
-    landscape = .x,
-    y = .y,
-    shape = "circle",
-    size = 400, 
-    # plot_id = .y$plot_id$ID,
-    level = "class",
-    metric = c(
-      "pland",
-      "np",
-      "ed"
-    ),
-    name = c(
-      "percentage of landscape",
-      "number of patches",
-      "edge density"
-    ),
-    type = c(
-      "area and edge metric",
-      "aggregation metric",
-      "area and edge metric"
-    ), 
-    what = c(
-      "lsm_c_pland",
-      "lsm_c_np",
-      "lsm_c_ed"
-    ),
-    classes_max = 2, 
-    verbose = FALSE
+landscape_metrics400 <- buffer400 |> 
+  purrr::map(
+    \(.x) calculate_lsm(
+      landscape = .x,
+      what = metrics
+    )
+  ) |> 
+  purrr::list_rbind(
+    names_to = "id"
   )
-)
 
 # Buffer of 1000m
-all_cover_metric1000 <- purrr::map2(
-  cover_reclass3,
-  ep_cities_data,
-  \(.x, .y) 
-  # plot_id <- names(.y),
-  sample_lsm(
-    landscape = .x,
-    y = .y,
-    shape = "circle",
-    size = 1000, 
-    # plot_id = .y$plot_id$ID,
-    level = "class",
-    metric = c(
-      "pland",
-      "np",
-      "ed"
-    ),
-    name = c(
-      "percentage of landscape",
-      "number of patches",
-      "edge density"
-    ),
-    type = c(
-      "area and edge metric",
-      "aggregation metric",
-      "area and edge metric"
-    ), 
-    what = c(
-      "lsm_c_pland",
-      "lsm_c_np",
-      "lsm_c_ed"
-    ),
-    classes_max = 2, 
-    verbose = FALSE
+landscape_metrics1000 <- buffer1000 |> 
+  purrr::map(
+    \(.x) calculate_lsm(
+      landscape = .x,
+      what = metrics
+    )
+  ) |> 
+  purrr::list_rbind(
+    names_to = "id"
   )
-)
 
 # Buffer of 2000m
-all_cover_metric2000 <- purrr::map2(
-  cover_reclass3,
-  ep_cities_data,
-  \(.x, .y) 
-  # plot_id <- names(.y),
-  sample_lsm(
-    landscape = .x,
-    y = .y,
-    shape = "circle",
-    size = 2000, 
-    # plot_id = .y$plot_id$ID,
-    level = "class",
-    metric = c(
-      "pland",
-      "np",
-      "ed"
-    ),
-    name = c(
-      "percentage of landscape",
-      "number of patches",
-      "edge density"
-    ),
-    type = c(
-      "area and edge metric",
-      "aggregation metric",
-      "area and edge metric"
-    ), 
-    what = c(
-      "lsm_c_pland",
-      "lsm_c_np",
-      "lsm_c_ed"
-    ),
-    classes_max = 2, 
-    verbose = FALSE
+landscape_metrics2000 <- buffer2000 |> 
+  purrr::map(
+    \(.x) calculate_lsm(
+      landscape = .x,
+      what = metrics, 
+    )
+  ) |> 
+  purrr::list_rbind(
+    names_to = "id"
   )
+
+# Buffer of 5000m
+landscape_metrics5000 <- buffer5000 |> 
+  purrr::map(
+    \(.x) calculate_lsm(
+      landscape = .x,
+      what = metrics
+    )
+  ) |> 
+  purrr::list_rbind(
+    names_to = "id"
+  )
+
+# create a single data frames -------------------------------------------
+
+landscape_metrics_list <- list(
+  "40" = landscape_metrics40,
+  "100" = landscape_metrics100,
+  "200" = landscape_metrics200,
+  "400" = landscape_metrics400,
+  "1000" = landscape_metrics1000,
+  "2000" = landscape_metrics2000,
+  "5000" = landscape_metrics5000
 )
 
-# View(all_cover_metric$ATIBAIA)
-
-# summarize data frames -------------------------------------------
-
+landscape_metrics <- landscape_metrics_list |> 
+  purrr::list_rbind(
+    names_to = "buffer"
+  ) |> 
+  dplyr::filter(class == 1) |> 
+  dplyr::right_join(
+    point_ep,
+    dplyr::join_by(
+      id
+    )
+  ) |> 
+  tidyr::pivot_wider(
+    names_from = c(metric, buffer),
+    values_from = value,
+    names_sep = ""
+  ) |> 
+  dplyr::select()
 

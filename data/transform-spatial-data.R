@@ -17,6 +17,7 @@ source(here::here("R/dependencies.R"))
 
 # Define coordinate reference system -------------------------------------------
 novo_crs <- CRS("+proj=longlat +datum=WGS84 +no_defs")
+  # CRS("EPSG:31983")
 
 # convert shapefile objects to the same crs -------------------------------------------
 # epizooties events
@@ -34,10 +35,31 @@ polygon_cities <- st_transform(
 # Polygon and point data with epizooties and cities limits -------------------------------------------
 
 # create a filter for cities of interest
-cities_filter <- c(sort(unique(point_ep$MUN)),
+cities_filter_polygons <- c(sort(unique(point_ep$MUN))[-c(1, 19)],
                    "FRANCISCO MORATO", "HORTOLÂNDIA",
                    "JOANÓPOLIS", "LOUVEIRA",
-                   "SUMARÉ", "VARGEM")
+                   "SUMARÉ")
+
+# filter points by cities names
+point_ep <- point_ep |> 
+  dplyr::select(1, 8, 9, 10, 11, 12, 14) |> 
+  dplyr::filter(MUN %in% cities_filter) |> 
+  rename(
+    id = ID,
+    name_muni = MUN,
+    animais = Animais,
+    status = STATUS,
+    genero = GENERO,
+    data = Data,
+    ano = ANO
+  ) |>
+  mutate(
+    status = fct_recode(
+      status,
+      Positive = "positivo",
+      Negative = "Negativo"
+    )
+  )
 
 # filter cities polygons
 filtered_polygon_cities <- polygon_cities |> 
@@ -48,18 +70,7 @@ filtered_polygon_cities <- polygon_cities |>
     geom
   )
 
-# give equal names to city names column
-point_ep <- point_ep |> 
-  rename(name_muni = MUN) |>
-  mutate(
-    status = as.factor(STATUS),
-    status = fct_recode(
-      status,
-      Positive = "positivo",
-      Negative = "Negativo"
-    )
-  )
-
+# join ep events and cities polygons
 ep_cities <- filtered_polygon_cities |> 
   st_join(
     point_ep,
@@ -68,59 +79,6 @@ ep_cities <- filtered_polygon_cities |>
 
 # Epizootic event exploration data -------------------------------------------
 exploration_point_ep <- point_ep |> 
-  filter(name_muni %in% cities_names)
-
-# Data for mapping buffers -------------------------------------------
-# filter data for one city and one point
-buffer_ep_atibaia <- point_ep_atibaia |> 
-  dplyr::filter(
-    status == "Positivo",
-    ID == 351
-  )
-
-# define buffer sizes
-buffer1 <- 40
-buffer2 <- 100
-buffer3 <- 200
-buffer4 <- 400
-buffer5 <- 1000
-buffer6 <- 2000
-
-# define buffers around point
-# 40 meters
-buffer_points1 <- st_buffer(
-  buffer_ep_atibaia, 
-  dist = buffer1
-)
-
-# 100 meters
-buffer_points2 <- st_buffer(
-  buffer_ep_atibaia, 
-  dist = buffer2
-)
-
-# 200 meters
-buffer_points3 <- st_buffer(
-  buffer_ep_atibaia, 
-  dist = buffer3
-)
-
-# 400 meters
-buffer_points4 <- st_buffer(
-  buffer_ep_atibaia, 
-  dist = buffer4
-)
-
-# 1000 meters
-buffer_points5 <- st_buffer(
-  buffer_ep_atibaia, 
-  dist = buffer5
-)
-
-# 2000 meters
-buffer_points6 <- st_buffer(
-  buffer_ep_atibaia, 
-  dist = buffer6
-)
+  filter(name_muni %in% cities_filter)
 
 # rm(list = ls())

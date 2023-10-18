@@ -10,6 +10,7 @@
 # Load data -------------------------------------------
 source(here::here("data-raw/load-spatial-data.R"))
 source(here::here("data/transform-spatial-data.R"))
+cities_cover <- terra::rast(here::here("data/cities-cover.tif"))
 
 # Load packages -------------------------------------------
 source(here::here("R/dependencies.R"))
@@ -17,10 +18,10 @@ source(here::here("R/dependencies.R"))
 # Transform raster data -------------------------------------------
 
 # create a filter for cities of interest
-cities_filter <- c(sort(unique(point_ep$MUN)),
+cities_filter <- c(sort(unique(point_ep$name_muni)[-c(1, 19)]),
                   "FRANCISCO MORATO", "HORTOLÂNDIA",
                   "JOANÓPOLIS", "LOUVEIRA",
-                  "SUMARÉ", "VARGEM")
+                  "SUMARÉ")
 
 # renomear a lista
 names(geotiff_cover) <- sort(cities_filter)
@@ -74,14 +75,6 @@ for (i in 1:length(cover_reclass2)) {
 #   filename = "data/cities-cover.tif", 
 #   format = "GTiff"
 # )
-
-# Crop land cover layer -------------------------------------------
-# crop raster to the same extent of 2000m buffer 
-# layer
-crop_atibaia <- raster::crop(
-  cover_reclass2$ATIBAIA,
-  buffer_points6
-)
 
 # geotiff_cover_croped <- crop(
 #   x = geotiff_cover,

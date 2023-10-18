@@ -120,6 +120,8 @@ study_area_map <- land_cover_layer +
 
 study_area_map  
 
+tmap_mode("view")
+
 # Save study area map on disk -------------------------------------------
 
 # tmap_save(
