@@ -1,0 +1,125 @@
+---
+output: 
+  word_document:
+    toc: true
+    toc_depth: 2
+    reference_docx: template_relatorio_bolsa_ppbio.docx
+bibliography: referencias_relatorio.bib
+---
+
+**Resumo**:
+
+**Plavras-chave**: ecologia de doenças, ecologia da paisagem, zoonoses emergentes, transbordamento flavovírus, primatas não-humanos, efeito diluição, uso e cobertura do solo
+
+# Introdução
+
+O risco de zoonoses está diretamente relacionado a perda de habitats naturais e a consequente intensificação do contato de animais silvestres com animais domésticos e seres humanos. Mudanças de uso do solo, como a conversão de habitats de floresta em plantações ou pastagens tendem a reduzir a biodiversidade, selecionando aquelas espécies que são capazes de sobreviver nos habitats alterados [@watt2020]. Eventualmente, tais espécies que coexistem em áreas próximas a grandes adensamentos populacionais ou que entram em contato com humanos através do comércio ou consumo de sua carne acabam por promover o transbordamento de uma zoonose (ex. *spillover*) se estiverem carregando patógenos capazes de infectar seres humanos [@loh2015, @ferreira2021].  
+
+[Figura 1-1a - A conversão de habitats naturais e o comércio ilegal intensificam o contato de humanos com animais silvestres favorecendo o transbordamento de zoonoses. Fonte: Ferreira et al. 2021. © Araquem Alcântara, WWF-Brasil](inst/figuras/Ferreira_et_al_2021_habitat_conversion.png)
+
+[Figura 1-1b - A conversão de habitats naturais e o comércio ilegal intensificam o contato de humanos com animais silvestres favorecendo o transbordamento de zoonoses. Fonte: Ferreira et al. 2021. © Araquem Alcântara, WWF-Brasil](inst/figuras/comercio_ilegal.jpeg)
+
+[Figura 1-1c - A conversão de habitats naturais e o comércio ilegal intensificam o contato de humanos com animais silvestres favorecendo o transbordamento de zoonoses. Fonte: Ferreira et al. 2021. © Araquem Alcântara, WWF-Brasil](inst/figuras/consumo_ilegal.jpeg)
+
+Há em todo o mundo exemplos de situações onde as chances de transbordamento aumentam em decorrência da degradação de habitats naturais. Em Bangladesh morcegos que carregam o vírus Nipah – que pode matar de 40-75% das pessoas infectadas – agora são encontrados em áreas com alta densidade populacional porque seus habitats de floresta foram completamente removidos [@gabra2022]. Na Amazônia brasileira, áreas com baixa diversidade de espécies endêmicas e elevada atividade humana são aquelas que apresentam o maior risco para infecções por malária [@gonzalez2023], uma doença prevalente na região. Mesmo a pandemia de SARS-CoV-2 poderia ter sido prevenida se a barreira de contato entre o patógeno, antes escondido e isolado no sudeste da Ásia, e seres humanos não tivesse sido rompida pela intensificação do contato de morcegos com outras espécies de mamíferos [@hoberg2022]. Eliminar o risco de novas zoonoses envolve necessariamente interromper o processo de *spillover*, o qual se intensifica em cenários de perda de habitat naturais e biodiversidade [@vora2022]. 
+
+[Figura 1-2 - A intensificação do contato de humanos com animais silvestres favorece o transbordamento de zoonoses. Fonte: Vora et al. 2022. © Araquem Alcântara, WWF-Brasil](inst/figuras/spillover.jpeg)
+
+A manutenção de elevados níveis de diversidade biológica pode reduzir o transbordamento e o risco de zoonoses a partir do chamado efeito de diluição, no qual as espécies de uma comunidade diversa diluem o impacto de espécies hospedeiras que prosperam após o declínio da diversidade [@ostfeld2000]. Esses efeitos podem ser alcançados artificialmente pela alteração da diversidade intra ou interespecífica para reduzir a transmissão de parasitas e patógenos. Por exemplo, uma estratégia comum em plantações é adicionar uma variedade resistente ao patógeno em questão, os chamados super diluidores [@keesing2021]. Esses indivíduos impactam negativamente o potencial de transbordamento do patógeno por promoverem uma variedade de caminhos potenciais, reduzindo assim a sua transmissão [@burdon2006]. A diversidade interespecífica também pode ser usada para interferir sobre a taxa de transmissão de doenças mediada por vetores em humanos. A Organização Mundial de Saúde e outros reconhecem o potencial de uso de animais domésticos para evitar ataque por mosquitos a humanos como uma medida de manejo contra malária e outras doenças transmissíveis por vetores [@ault1994; @kloter1983]. Nesse caso, os animais domésticos funcionam como hospedeiros super diluidores, ou seja, de baixa qualidade em termos de transmissão do patógeno ou parasita, e que desviam atração dos vetores por representarem um fonte de alimento adicional [@saul2003]. 
+
+Processos importantes para os ciclos epidemiológicos, como o movimento de infectados, hospedeiros infectantes e vetores podem ser influenciados por múltiplos fatores da paisagem, incluindo fatores de uso da terra que facilitam ou dificultam a dijeto dos mocóspersão (ex. conectividade) [@russell2006]. O fluxo de organismos pode ser alterado, por exemplo, pelo efeito da fragmentação quando esta altera a conectividade funcional da paisagem [@crooks2006], afetando o potencial de dispersão de um patógeno [@mccallum2002]. No Brasil, o risco de malária na região Amazônica é influenciado por uma complexa interação entre características de uso e cobertura da terra como presença de florestas, de áreas antropisadas ou o grau de biodiversidade [@gonzalez2023]. Na Mata Atlântica do sudeste brasileiro, o estudo de @prist2021 demonstrou que o vírus da febre amarela dispersa principalmente por estradas adjacentes a áreas de florestas, e ao longo da borda da floresta com interfaces adjacentes a áreas de agricultura, copos d’ água e áreas de floresta. A paisagem tem um papel determinante na dinâmica espaço-temporal de uma doença e compreender o seu grau de influência pode auxiliar na prevenção de zoonoses.
+
+[Figura 1-3 - A fragmentação do habitat altera características como a redução de ambientes naturais e a sua conectividade favorecendo a ocorrência de zoonoses.](inst/figuras/)
+
+Elevados níveis de diversidade biológica tem maior chance de serem observados dado que características específicas da paisagem, como a quantidade de habitat e sua configuração, variem dentro de amplitudes específicas. A quantidade de habitat em uma paisagem é definida pela área de habitat presente em paisagens de tamanho fixo, independente do grau de fragmentação e constitui uma hipótese postulada e defendida por @fahrig2013, a “hipótese da quantidade de habitat” (HQH). Segundo esta hipótese, as áreas das manchas de habitat e o grau isolamento entre elas, antes características da paisagem apontadas como determinantes da diversidade, são substituídas por uma única determinante, a quantidade de habitat [@fahrig2013]. Muitos estudos corroboram a HQH demonstrando que a quantidade de habitat é mais importante que sua configuração para prever o número de espécies em uma paisagem. Um estudo teórico, desenvolvido a partir da aplicação de simulações de modelos baseado no indivíduo, conduzido por @jackson2016, demonstrou que a quantidade do habitat foi relativamente mais importante que a sua configuração para regular os tamanhos populacionais e sua estrutura genética. Para pequenos mamíferos de uma região de Savana do Brasil, a quantidade de habitat afetou fortemente o número de espécies, enquanto não houve efeito de área da mancha e isolamento quando a quantidade de habita foi mantida constante [@melo2017]. 
+
+Além de substituir a área da mancha e o grau de isolamento como determinantes importantes da biodiversidade, a HQH também assume que para prever a relação entre a distribuição do habitat e o número de espécies é desnecessário levar em consideração a configuração do habitat independente da quantidade de habitat [@fahrig2013].  A configuração do habitat independente da sua quantidade, portanto se refere ao arranjo espacial das manchas de habitat [@fahrig2003]. Contudo, há estudos que apontam que o seu papel pode ser determinante do número de espécies na paisagem, com sua relevância variando diferentemente de acordo com as condições de variação da quantidade de habitat [@villard2014]. Por exemplo, a “hipótese do limiar de fragmentação” (HLF) afirma que a configuração do habitat é mais importante em paisagens que possuem uma quantidade de habitat relativamente menor (ex. < 20–30%), onde a conectividade entre manchas de habitat é reduzida [@andren1994]. @fahrig1998 encontrou que a configuração do habitat foi importante para a sobrevivência das espécies quando a quantidade de habitat era inferior a 20%. @puttker2020 registrou que a configuração do habitat foi mais importante a valores intermediários de quantidade de habitat, entre 30–60%, e mesmo a níveis superiores a 60%, a depender do grupo taxonômico em questão. Portanto, compreender a influência relativa da quantidade de habitat e de sua configuração sobre a biodiversidade em paisagens fragmentadas constitui uma ferramenta importante para o planejamento de medidas de manejo e restauração de habitats visando manutenção do efeito de diluição promovidos por elevados graus de biodiversidade. Apesar da relevância à prevenção de zoonoses e do transbordamento, o papel da variação de características da paisagem geradas pelo homem, como a quantidade e configuração do habitat sobre a ocorrência de zoonoses como a febre amarela, esse ainda é um aspecto pouco explorado.
+
+O vírus da febre amarela (FA) é um flavovírus transmitido por mosquitos que causa febre hemorrágica em aproximadamente 200 mil pessoas e 30 mil mortes anualmente [@garske2014]. No Brasil, o vírus circula em um ciclo de transmissão silvestre entre primatas não humanos e mosquitos diurnos dos gêneros Haemagogus spp. e Sabethes spp., e o transbordamento ocorre quando esses mosquitos transmitem o vírus a humanos [@thoisy2020]. A doença apresenta um padrão sazonal, com a maior frequência da doença em seres humanos ocorrendo entre os meses de  dezembro a maio @zotero-11 (Ministério da Saúde do Brasil 2023). Uma expansão geográfica da doença à região sudeste do país vem sendo observada (Ministério da saúdo do Brasil 2017), a qual pode estar ligada ao surgimento de condições na paisagem favoráveis à dispersão, estabelecimento e proliferação dos vetores e do patógeno.
+
+Primatas não-humanos (PNH’s) são os principais hospedeiros da FA [@monath2001], com os macacos bugio (Alouatta spp.) sendo a espécie mais suscetível a infecção [@deazevedo2021]. A morte de macacos bugio pode indicar a circulação do vírus em uma localidade, apontando para a necessidade de vacinação da população humana se a presença do vírus for confirmada a partir de um diagnóstico adequado. A notificação de casos de FA em PNH são chamadas de eventos epizoóticos (ex. a ocorrência de um evento positivo para doença numa população animal; @almeida2014) e, no Brasil, sua ocorrência requer a comunicação imediata às autoridades da saúde (Brazil 2006).
+
+Os vetores da FA incluem espécies de mosquitos de hábitos arboreais pertencentes aos gêneros Haemagogus e Sabthes.  A sua presença e abundância estão positivamente relacionadas a presença de recursos alimentares [@pittendrigh1950], altas temperaturas e baixa umidade [@pinto2009]. Essas condições são mais comuns em paisagens com baixas proporções de cobertura florestal [@alencar2018] e próximas a áreas de criação de gado. Os mosquitos fêmeas tornam-se infectados durante a mordida em um hospedeiro durante a viremia ou por transmissão transovarial [@mondet2002].
+
+Um melhor entendimento da relação entre a ocorrência da FA em comunidades naturais de PNH e a quantidade de habitat e sua configuração pode ser utilizado para a elaboração de estratégias de manejo e restauração de paisagens naturais que atinjam um maior compromisso entre a manutenção de elevados níveis de diversidade e a prevenção da FA e, potencialmente, de outras DZE’s. O presente projeto modelará a relação entre a quantidade de habitat, sua configuração e a  ocorrência de FA nas comunidades de PNH numa paisagem fragmentada do estado de São Paulo, o mais populoso do país. O procedimento de modelagem será baseado em dados empíricos, na HQH e na HLF. Os objetivos deste projeto serão: i) compreender a influência relativa da quantidade de habitat e sua configuração sobre a probabilidade de ocorrência da FA em PNH; ii) compreender a influência relativa da quantidade de habitat e sua configuração sobre o número de espécies de PNH; e iii) compreender a relação entre a riqueza de PNH e a probabilidade de ocorrência da FA, para inferir sobre quais características da paisagem facilitam ou dificultam i) a ocorrência da FA; ii) elevados níveis de diversidade de PNH; e iii) se uma elevada diversidade de PNH pode mediar o efeito de diluição e reduzir a ocorrência de FA. As análises serão conduzidas para todo o gradiente de quantidade de habitat e separadamente, para paisagens contendo níveis baixos (< 30%), intermediários (30%-60%) e elevados (> 60%). Os modelos receberão duas métricas de fragmentação do habitat (número de manchas e densidade de borda) comumente utilizadas para avaliar os efeitos da configuração do habitat, cada uma ligada a diferentes processos ecológicos [@wang2014]. As principais expectativas são de que i) a fragmentação do habitat afete i) positivamente a ocorrência da FA, ii) negativamente o número de espécies de PNH, especialmente em paisagens com níveis baixos ou intermediários de quantidade de habitat e iii) que menores probabilidades de ocorrência da FA estarão associadas a uma elevada diversidade de PNH [@andren1994; @fahrig2003; @villard2014]. 
+
+# Metodologia
+
+## Área de estudo
+
+O estudo compreenderá 30 municípios do estado de São Paulo, localizado no bioma da Mata Atlântica (Figura 1- Mapa). Os municípios foram escolhidos por possuírem um sistema de monitoramento da FA a época do período de surto entre 2016 e 2018. A coleta de dados de epizootias foi conduzida sitemática e intensivamente durante o período de surto, utilizando métodos de monitoramento ativo e passivo para a detecção de PNH doentes ou mortos. Mais detalhes sobre a área de estudo podem ser encontrados no Apêndice S1 de @prist2021, trabalho a partir do qual se obterá a base de dados para condução desse estudo.
+
+[Figura 1 - Área de estudo compreendendo 30 municípios do estado de São Paulo e a distribuição dos eventos de epizootias.](output/mapa-cobertura-fa.tiff)
+## Dados de epizootia
+
+Os dados de epizootia foram obtidos a partir da base de dados fornecida por @prist2021. De outubro de 2016 a janeiro de 2018, 551 PNH mortos foram reportados às autoridades locais  e tiveram material biológico coletado na área de estudo, dos quais 222 foram negativos (151 Calithrix, 30 Alouatta, 5 Sapajus e 36 espécies não identificadas) e 328 foram positivos para FA (243 Alouatta, 20 Calithrix, 9 Callicebus, 2 Sapajus e 54 espécies não identificadas. Para as análises subsequentes, serão considerados apenas os eventos positivos de Alouatta sp. (n = 243) porque eles são bons indicadores espacial e temporal da circulação do virus [@deazevedo2021], uma vez que eles possuem uma área de vida restrita e um elevado valor preditivo de positivos (elevada susceptibilidade ao vírus), morrendo alguns dias após a exposição ao vírus e se tornar infeccioso. Portanto, eventos de Alouattas representam a presença do vírus no  espaço e no tempo. Os demais gêneros (Callithrix, Sapajus, Callicebus) podem apresentar resistência a infecção  e desenvolver imunidade ao vírus [@deazevedo2021] e seu papel no ciclo de transmissão não é completamente compreendido [@cunha2019]. De fato, indivíduos pertencentes a esses gêneros tiveram sua morte associada a outras causas e, consequentemente um evento de morte não indica acuradamente a ocorrência do vírus no espaço e no tempo. Para os eventos negativos, todos os gêneros serão considerados como apresentando um elevado valor preditivo de negativos [@deazevedo2021; @cunha2019] e representam a ausência do vírus na paisagem, a qual permitirá o uso dos dados negativos de todas as espécies no processo de análise (n = 186). Dados positivos ou negativos com espécies não identificadas serão excluídos da análise.
+
+Casos positivos para FA foram determinados no Instituto Adolfo Lutz (o laboratório referência) por análises moleculares e testes padronizados como determinado no guia da FA do Ministério da Saúde (Ministério da Saúde do Brasil 2017) e os resultados foram validados pelo Centro de Monitoramento Epidemiológico do estado de São Paulo (CVE).
+
+## Métricas da paisagem
+
+Para avaliar o efeito da perda de habitat e da fragmentação, será adotado o conceito de paisagem local proposto por @fahrig2013 que consiste em uma paisagem circular centrada ao redor de cada evento de epizootia. Para todas as epizootias serão definidas paisagens locais com diferentes extensões para definir a escala do efeito. Em cada paisagem local serão calculadas três métricas da paisagem: 1) a porcentagem de cobertura florestal, 2) o número de manchas de floresta e 3) a densidade de borda, calculada a partir da razão entre a extensão total de borda de floresta e o tamanho da paisagem. O número de manchas será utilizado porque essa métrica está diretamente relacionada a definição de fragmentação do habitat [@fahrig2019], ou seja, quanto maior o número de manchas maior é o grau de fragmentação do habitat. Como o aumento na fragmentação do habitat leva a mais bordas seus efeitos também podem ser relacionados ao efeito de borda, o qual pode ser estimado pela densidade de borda na paisagem [@wang2014; @fahrig2017]. O número de manchas e a densidade de borda também são as métricas mais comumente utilizadas para para quantificar a fragmentação do habitat [@fahrig2017]. Elas são de simples interpretação e estão claramente ligadas a diferentes processos ecológicos associados a fragmentação do habitat, tanto a sua subdivisão quanto aos efeitos de borda. Métricas de isolamento do habitat estão associadas a quantidade de habitat ao redor das manchas [@fahrig2013] e por isso não serão utilizadas para acessar a fragmentação do habitat no nível da paisagem (ex. @fahrig2017). Outras variáveis que podem potencialmente afetar a ocorrência da FA e a riqueza de PNH não serão consideradas porque o foco do estudo será quantificar a magnitude e direção dos efeitos da perda e da fragmentação do habitat.
+
+As métricas da paisagem serão medidas com base no mapa de resolução intermediária (30m) da Mata Atlântica obtido na base do MapBiomas (http://mapbiomas.org). A definição do habitat será baseada nos tipos de formação de floresta nativa (ex. floresta ombrófila densa, aberta e mista, floresta semidecídua e sazonal semidecídua e formação pioneira). As  demais categorias de uso serão classificadas como matriz. 
+
+## Análise dos dados
+
+Para determinar a escala da paisagem em que a ocorrêncaia de febre amarela melhor responde as caracteríscas da paisagem, as métricas serão calcluadas dentro de círculos (*buffers*) de diferentes raios (40, 100, 200, 400, 1000 e 2000) traçados ao em torno de cada ponto (ex. análises de sensibilidade - Figura 2). Todas as métricas serão obtidas utilizando o pacote landscapemetrics [@hesselbarth2019].
+
+[Figura 2 - Buffers de 40, 100, 200, 400, 1000 e 2000 metros representando as áreas onde as métricas da paisagem serão caculadas.](output/mapa-buffers.tiff)
+
+Para para definir o tamanho da paisagem na qual as métricas da paisagem serão utilizadas nas análises, será conduzida uma seleção de modelos. Este procedimento será realizado porque a extensão da paisagem na qual as métricas melhor preveem a ocorrência da FA e da riqueza de PNH é desconhecida (ex. escala do efeito H. B. Jackson & Fahrig 2015). A próxima etapa consistirá, se necessário, na definição da função de autocorrelação espacial mais verossímil para lidar com a autocorrelação espacial entre os eventos de epizootia. Para investigar por possíveis pseudoreplicações causadas pela sobreposição entre paisagens adjacentes, será calculada a distância entre todos os pares de eventos de epizootia.
+Para acessar os efeitos diretos e indiretos (via fragmentação do habitat) da perda de habitat, um modelo de equação estrutural será formulado a partir da combinação de três modelos lineares generalizados de efeito-misto (GLMM’s): um para prever a ocorrência dos eventos de epizootia, outro para prever a fragmentação do habitat e outro para prever a riqueza de PNH. Os GLMM’s para prever a ocorrência de FA incluirá a quantidade de habitat, uma das duas métricas de fragmentação, em caso de haver correlação entre eles, ou as duas em caso de não serem correlacionadas, e a riqueza de PNH como variáveis explanatórias. Ao incluir as métricas de quantidade e fragmentação de habitat no modelo será possível estimar os efeitos independentes de cada variável (Smith et al. 2009). O GLMM para prever a fragmentação do habitat incluirá a quantidade de habitat e o GLMM para prever a riqueza de espécies de PNH incluirá a quantidade de habitat e uma das métricas de fragmentação, em caso de haver correlação entre eles, ou as duas em caso de não serem correlacionadas.
+O modelo de equação estrutural será aplicado primeiramente a um conjunto de dados cobrindo todo o gradiente de quantidade de habitat (0-100%). Em seguida, os dados serão analisados em três diferentes níveis de quantidade de habitat - < 30%, de 30-60% e > 60% - para testar se a magnitude ou a direção do efeito da perda e fragmentação do habitat e da riqueza de espécies de PNH varia ao longo dos níveis de quantidade de habitat Villard & Metzger (2014).
+O ajuste global do modelos de equação estrutural será avaliado aplicando a estatística C de Fisher, a qual é adequada para modelos mistos (Shipley 2000; Shipley 2009). O coeficiente de cada modelo de caminho serão extraídos para estimar os coeficientes dos caminhos, os quais indicam os efeitos diretos e indiretos das métricas de quantidade e da fragmentação do habitat e da riqueza de espécies de PNH sobre a ocorrência da FA, Grace 2006). Todas as análises serão conduzidas utilizando o ambiente R de programação estatística (R Core Team 2023).
+
+# Análises exploratórias
+
+Texto...
+
+[Figura 3 - Distribuição da porcentagem de cobertura florestal na paisagem de cada município. a) dotplot, b) boxplot e c) histograma](output/forest-cover-dist.tiff)
+
+[Figura 4 - Distribuição do número de fragmentos na paisagem de cada município. a) dotplot, b) boxplot e c) histograma](output/np-dist.tiff)
+
+[Figura 5 - Distribuição da densidade de borada na paisagem de cada município. a) dotplot, b) boxplot e c) histograma](output/ed-dist.tiff)
+
+Texto...
+
+[Figura 6 - Distribuição dos eventos de epizootia no gradiente de percentagem de cobertura florestal nos municípios da área de estudo.](output/ep-forest-cover.tiff)
+
+[Figura 7 - Distribuição dos eventos de epizootia no gradiente de números de fragmentos nos municípios da área de estudo.](output/ep-np.tiff)
+
+[Figura 8 - Distribuição dos eventos de epizootia no gradiente de densidade de borda nos municípios da área de estudo.](output/ep-ed.tiff)
+
+# Resultados esperados
+
+As principais expectativas são de que i) a fragmentação do habitat afete positivamente a ocorrência da FA, ii) negativamente o número de espécies de PNH, especialmente em paisagens com níveis baixos ou intermediários de quantidade de
+habitat e iii) que menores probabilidades de ocorrência da FA estarão associadas a uma elevada diversidade de PNH.
+
+[Figura - incluir esquema da análise de caminhos](output/.tiff)
+
+# Aplicações
+
+Texto...
+
+# Interações com outras redes
+
+## Rede de Vigilância em Virus PREVIR-MCTI
+
+A base de dados PREVIR consiste numa rede de vigilância de vírus cujo objetivo é detectar na fauna silvestre vírus com potencial de emergência para humanos em diferentes biomas brasileiros. Até o momento há oito redes de monitoramento que traz o registro de ocorrência de aves e morcegos distribuídas entre os biomas do Pantanal, da Amazônia e da Mata Atlântica. Até o momento, não está disponibilizado resultados clínicos que apontem a incidência/intensidade de patógenos de potencial de emergência para humanos, o que limita a aplicação da base para o estudo de determinantes ecológicos para ocorrência zoonoses. Foi redigido um e-mail para os gestores da base (fulano e fulano) para consultar sobre a produção e disponibilidade de dados relativos a ocorrência de eventos de epizootia nos indivíduos registrados. Somente após a disponibilização de dados dessa natureza será possível aplicar a base PREVIR para compreender os determinantes ecológicos de zoonoses presentes nesses animais.
+
+## Sistema de informação em saúde silvestre
+
+Texto...
+
+# Participação em outros projetos
+
+Texto...
+
+# Produção
+
+Ribeiro S.P, Vale M.M., Diniz-Filho J.A.F, Fernandes G.W, Reis A.B and Grelle C.E.V. 2022. Heading back into the perfect storm: increasing risks for disease emergence in Brazil? Journal of the Brazilian Society of Tropical Medicine 55: 1-3
+
+# Referências
+
+
