@@ -114,8 +114,8 @@ landscape_metrics5000 <- buffer5000 |>
     names_to = "id"
   )
 
-# create a single data frames -------------------------------------------
-
+# create a long ep landscape data frame  -------------------------------------------
+# create a list with with all landscape metrics
 landscape_metrics_list <- list(
   "40" = landscape_metrics40,
   "100" = landscape_metrics100,
@@ -126,7 +126,23 @@ landscape_metrics_list <- list(
   "5000" = landscape_metrics5000
 )
 
+# bind lists by raw
 landscape_metrics <- landscape_metrics_list |> 
+  purrr::list_rbind(
+    names_to = "buffer"
+  ) |> 
+  dplyr::filter(class == 1) |> 
+  dplyr::right_join(
+    point_ep,
+    dplyr::join_by(
+      id
+    )
+  ) |> 
+  dplyr::select(1, 5:14)
+
+# create ep events and landscape metrics wide data frame -------------------------------------------
+# join ep events and landscape metrics
+ep_landscape_metrics <- landscape_metrics_list |> 
   purrr::list_rbind(
     names_to = "buffer"
   ) |> 
@@ -142,5 +158,5 @@ landscape_metrics <- landscape_metrics_list |>
     values_from = value,
     names_sep = ""
   ) |> 
-  dplyr::select()
+  dplyr::select(4:32)
 
