@@ -28,7 +28,7 @@ xy_categoric_relation <- function(
     ggplot2::scale_discrete_manual(
       "Status",
       aesthetics = "fill",
-      values = c("blue", "red")
+      values = c("#bdd005", "#349834")
     ) + 
     ggplot2::theme_classic(
       base_size = 14,
