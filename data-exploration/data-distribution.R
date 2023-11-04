@@ -17,160 +17,100 @@ source(here::here("R/dependencies.R"))
 source(here::here("R/box_dot_histplot1.R"))
 
 # Forest cover % -------------------------------------------
-forest_cover_dist <- pland |> 
-  ggplot2::ggplot() +
-  ggplot2::aes(x = value) +
-  ggplot2::geom_histogram(
-    fill = "#bdd005",
-    color = "black",
-    binwidth = 25,
-    center = 25/2
-  ) +
-  ggplot2::labs(
-    x = "Cobertura floresta (%)",
-    y = "Frequência"
-  ) +
-  ggplot2::facet_wrap(
-    facets = ggplot2::vars(
-      buffer
-    ), 
-    scales = "free_y", as.table = TRUE
-  ) +
-  ggplot2::theme_classic(
-    base_size = 14,
-    base_family = "serif"
-  ) +
-  ggplot2::theme(
-    text = ggplot2::element_text(
-      color = "black", 
-      face = "bold"
-    ),
-    axis.text.x = ggplot2::element_text(
-      size = 12
-    ),
-    axis.text.y = ggplot2::element_text(size = 12),
-    # axis.ticks.x = ggplot2::element_blank(),
-    strip.background = ggplot2::element_rect(
-      color = "white"
-    ), 
-    strip.text = ggplot2::element_text(
-      color = "black"
-    )
-  )
+forest_cover_dist <- my_hist_facet(
+  data = pland,
+  x = value,
+  binwidth = 25,
+  xlab = "Cobertura floresta (%)",
+  ylab = "Frequência"
+)
 
 # save forest cover distribution on disk -------------------------------------------
-ggplot2::ggsave(
-  plot = forest_cover_dist,
-  filename = "output/forest-cover-dist.tiff",
-  height = 15,
-  width = 30,
-  units = "cm",
-  dpi = 100
-)
+# ggplot2::ggsave(
+#   plot = forest_cover_dist,
+#   filename = "output/forest-cover-dist.tiff",
+#   height = 15,
+#   width = 30,
+#   units = "cm",
+#   dpi = 100
+# )
 
 # Patch number -------------------------------------------
-np_dist <- np |> 
-  ggplot2::ggplot() +
-  ggplot2::aes(x = value) +
-  ggplot2::geom_histogram(
-    fill = "#bdd005",
-    color = "#bdd005",
-    binwidth = 1,
-    center = 1/2
-  ) +
-  ggplot2::labs(
-    x = "Número de fragmentos",
-    y = "Frequência"
-  ) +
-  ggplot2::facet_wrap(
-    facets = ggplot2::vars(
-      buffer
-    ), 
-    scales = "free_y"
-  ) +
-  ggplot2::theme_classic(
-    base_size = 14,
-    base_family = "serif"
-  ) +
-  ggplot2::theme(
-    text = ggplot2::element_text(
-      color = "black", 
-      face = "bold"
-    ),
-    axis.text.x = ggplot2::element_text(
-      size = 12
-    ),
-    axis.text.y = ggplot2::element_text(size = 12),
-    # axis.ticks.x = ggplot2::element_blank(),
-    strip.background = ggplot2::element_rect(
-      color = "white"
-    ), 
-    strip.text = ggplot2::element_text(
-      color = "black"
-    )
-  )
+np_dist <- my_hist_facet(
+  data = np,
+  x = value,
+  binwidth = 10,
+  xlab = "Número de fragmentos",
+  ylab = "Frequência"
+)
 
 # save patch number distribution on disk -------------------------------------------
-ggplot2::ggsave(
-  plot = np_dist,
-  filename = "output/np-dist.tiff",
-  height = 15,
-  width = 30,
-  units = "cm",
-  dpi = 100
-)
+# ggplot2::ggsave(
+#   plot = np_dist,
+#   filename = "output/np-dist.tiff",
+#   height = 15,
+#   width = 30,
+#   units = "cm",
+#   dpi = 100
+# )
 
 # Edge density -------------------------------------------
-ed_dist <- ed |> 
-  ggplot2::ggplot() +
-  ggplot2::aes(x = value) +
-  ggplot2::geom_histogram(
-    fill = "#bdd005",
-    color = "black",
-    binwidth = 1,
-    center = 1/2
-  ) +
-  ggplot2::labs(
-    x = "Densidade de borda",
-    y = "Frequência"
-  ) +
-  ggplot2::facet_wrap(
-    facets = ggplot2::vars(
-      buffer
-    ), 
-    scales = "free_y", as.table = TRUE
-  ) +
-  ggplot2::theme_classic(
-    base_size = 14,
-    base_family = "serif"
-  ) +
-  ggplot2::theme(
-    text = ggplot2::element_text(
-      color = "black", 
-      face = "bold"
-    ),
-    axis.text.x = ggplot2::element_text(
-      size = 12
-    ),
-    axis.text.y = ggplot2::element_text(size = 12),
-    # axis.ticks.x = ggplot2::element_blank(),
-    strip.background = ggplot2::element_rect(
-      color = "white"
-    ), 
-    strip.text = ggplot2::element_text(
-      color = "black"
-    )
-  )
+ed_dist <- my_hist_facet(
+  data = ed,
+  x = value,
+  binwidth = 1,
+  xlab = "Densidade de borda",
+  ylab = "Frequência"
+) 
 
 # save patch number distribution on disk -------------------------------------------
-ggplot2::ggsave(
-  plot = ed_dist,
-  filename = "output/ed-dist.tiff",
-  height = 15,
-  width = 30,
-  units = "cm",
-  dpi = 100
+# ggplot2::ggsave(
+#   plot = ed_dist,
+#   filename = "output/ed-dist.tiff",
+#   height = 15,
+#   width = 30,
+#   units = "cm",
+#   dpi = 100
+# )
+
+# Mean distance between epizootic events -------------------------------------------
+# uses point_ep as soon as loaded
+data_dist <- data.frame(
+  x = point_ep$LONGITUDE,
+  y = point_ep$LATITUDE
 )
+point_ep <- sf::st_transform(
+  point_ep, 
+  crs = raster::crs("EPSG:31983")
+  )
+
+data_dist <- data.frame(sf::st_distance(point_ep))
+mean_data_dist <- data_dist |>
+  dplyr::summarise(
+    dplyr::across(1:482), 
+    list(mean = mean),
+    .names = "x"
+    )
+
+library(units)
+mean_dist_ep_points <- mean_data_dist["X482"] |> 
+  my_hist(
+    x = X482,
+    binwidth = 5,
+    xlab = "Distance between sampling points",
+    ylab = "Frequência"
+  ) +
+  scale_x_units(unit = "km")
+  
+# save patch number distribution on disk -------------------------------------------
+# ggplot2::ggsave(
+#   plot = mean_dist_ep_points,
+#   filename = "output/mean_dist_ep_points.tiff",
+#   height = 15,
+#   width = 30,
+#   units = "cm",
+#   dpi = 100
+# )
 
 # number of PNH of each genus -------------------------------------------
 point_ep |> 
