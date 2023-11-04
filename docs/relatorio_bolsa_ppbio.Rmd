@@ -64,7 +64,7 @@ As métricas da paisagem serão medidas com base no mapa de resolução intermed
 
 ## Análise dos dados
 
-Para determinar a escala da paisagem em que a ocorrêncaia de febre amarela melhor responde as caracteríscas da paisagem, as métricas serão calcluadas dentro de círculos (*buffers*) de diferentes raios (40, 100, 200, 400, 1000 e 2000) traçados ao em torno de cada ponto (ex. análises de sensibilidade - Figura 2). Todas as métricas serão obtidas utilizando o pacote landscapemetrics [@hesselbarth2019].
+Para determinar a escala da paisagem em que a ocorrêncaia de febre amarela melhor responde as caracteríscas da paisagem, as métricas serão calcluadas dentro de círculos (*buffers*) de diferentes raios (40, 100, 200, 400, 1000, 2000 e 5000m) traçados ao em torno de cada ponto (ex. análises de sensibilidade - Figura 2). Todas as métricas serão obtidas utilizando o pacote landscapemetrics [@hesselbarth2019].
 
 [Figura 2 - Buffers de 40, 100, 200, 400, 1000 e 2000 metros representando as áreas onde as métricas da paisagem serão caculadas.](output/mapa-buffers.tiff)
 
