@@ -142,23 +142,23 @@ new_limits <- st_bbox(buffer_points6) +
   c(-0.001, -0.004, 0.001, 0.002) 
 
 # cover layer -------------------------------------------
-cover_layer_bufffer <- tm_shape(
+cover_layer_bufffer <- tmap::tm_shape(
   crop_atibaia,
   bbox = new_limits, 
   crs = projection(cover_reclass2$ATIBAIA)
 ) +
-  tm_raster(
-    col.scale = tm_scale_ordinal(
+  tmap::tm_raster(
+    col.scale = tmap::tm_scale_ordinal(
       n.max = 2,
       values = c("white", "green"),
       levels = c(0, 1),
       labels = c("Não floresta", "Floresta")
     ),
-    col.legend = tm_legend(
+    col.legend = tmap::tm_legend(
       title = "Legenda",
       width = 7.5,
       height = 5,
-      position = tm_pos_auto_out(
+      position = tmap::tm_pos_auto_out(
         pos.h = "left",
         pos.v = "top"
       ),
@@ -230,9 +230,9 @@ buffer_map <- cover_layer_bufffer +
 buffer_map
 
 # Save buffer map on disk -------------------------------------------
-tmap_save(
+tmap::tmap_save(
   tm = buffer_map,
-  filename = "output/mapa-buffers.tiff",
+  filename = "output/mapa-buffers.jpeg",
   width = 6.5,
   height = 5.5,
   dpi = 200
