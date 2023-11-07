@@ -15,6 +15,8 @@ source(here::here("R/dependencies.R"))
 
 # Load functions -------------------------------------------
 source(here::here("R/box_dot_histplot1.R"))
+source(here::here("R/my_hist.R"))
+source(here::here("R/my_hist_facet.R"))
 
 # Forest cover % -------------------------------------------
 forest_cover_dist <- my_hist_facet(
@@ -28,11 +30,11 @@ forest_cover_dist <- my_hist_facet(
 # save forest cover distribution on disk -------------------------------------------
 # ggplot2::ggsave(
 #   plot = forest_cover_dist,
-#   filename = "output/forest-cover-dist.tiff",
+#   filename = "output/forest-cover-dist.jpeg",
 #   height = 15,
 #   width = 30,
 #   units = "cm",
-#   dpi = 100
+#   dpi = 50
 # )
 
 # Patch number -------------------------------------------
@@ -47,11 +49,11 @@ np_dist <- my_hist_facet(
 # save patch number distribution on disk -------------------------------------------
 # ggplot2::ggsave(
 #   plot = np_dist,
-#   filename = "output/np-dist.tiff",
+#   filename = "output/np-dist.jpeg",
 #   height = 15,
 #   width = 30,
 #   units = "cm",
-#   dpi = 100
+#   dpi = 50
 # )
 
 # Edge density -------------------------------------------
@@ -66,11 +68,11 @@ ed_dist <- my_hist_facet(
 # save patch number distribution on disk -------------------------------------------
 # ggplot2::ggsave(
 #   plot = ed_dist,
-#   filename = "output/ed-dist.tiff",
+#   filename = "output/ed-dist.jpeg",
 #   height = 15,
 #   width = 30,
 #   units = "cm",
-#   dpi = 100
+#   dpi = 50
 # )
 
 # Mean distance between epizootic events -------------------------------------------
@@ -105,11 +107,11 @@ mean_dist_ep_points <- mean_data_dist["X482"] |>
 # save patch number distribution on disk -------------------------------------------
 # ggplot2::ggsave(
 #   plot = mean_dist_ep_points,
-#   filename = "output/mean_dist_ep_points.tiff",
+#   filename = "output/mean_dist_ep_points.jpeg",
 #   height = 15,
 #   width = 30,
 #   units = "cm",
-#   dpi = 100
+#   dpi = 50
 # )
 
 # number of PNH of each genus -------------------------------------------
