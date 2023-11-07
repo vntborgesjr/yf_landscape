@@ -1,4 +1,4 @@
-my_hist_facet <- function(
+my_hist <- function(
     data,
     x,
     binwidth,
@@ -19,12 +19,6 @@ my_hist_facet <- function(
     ggplot2::labs(
       x = xlab,
       y = ylab
-    ) +
-    ggplot2::facet_wrap(
-      facets = ggplot2::vars(
-        buffer
-      ), 
-      scales = "free_y"
     ) +
     ggplot2::theme_classic(
       base_size = 14,
