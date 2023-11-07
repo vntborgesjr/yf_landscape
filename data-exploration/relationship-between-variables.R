@@ -30,11 +30,11 @@ ep_forest_cover <- ep_pland |>
 # save epizooties distribution on forest cover gradient on disk -------------------------------------------
 # ggplot2::ggsave(
 #   plot = ep_forest_cover,
-#   filename = "output/ep-forest-cover.tiff",
+#   filename = "output/ep-forest-cover.jpeg",
 #   height = 15,
 #   width = 30,
 #   units = "cm",
-#   dpi = 100
+#   dpi = 50
 # )
 
 # Relation between epizooties and number of patches -------------------------------------------
@@ -53,11 +53,11 @@ ep_number_patches <- ep_np |>
 # save epizooties distribution on number of patches gradient on disk -------------------------------------------
 # ggplot2::ggsave(
 #   plot = ep_number_patches,
-#   filename = "output/ep-np.tiff",
+#   filename = "output/ep-np.jpeg",
 #   height = 15,
 #   width = 30,
 #   units = "cm",
-#   dpi = 100
+#   dpi = 50
 # )
 
 # Relation between epizooties and edge density -------------------------------------------
@@ -76,11 +76,11 @@ ep_edge_density <- ep_ed |>
 # save epizooties distribution on edge density gradient on disk -------------------------------------------
 # ggplot2::ggsave(
 #   plot = ep_edge_density,
-#   filename = "output/ep-ed.tiff",
+#   filename = "output/ep-ed.jpeg",
 #   height = 15,
 #   width = 30,
 #   units = "cm",
-#   dpi = 100
+#   dpi = 50
 # )
 
 # number of PNH of each genus -------------------------------------------
