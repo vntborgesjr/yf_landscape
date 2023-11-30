@@ -7,13 +7,15 @@
 #                                             #
 ##%#########################################%##
 
+# The objective of the script is to load all data needed to the analysis
+
 # Load packages -------------------------------------------
 source(here::here("R/dependencies.R"))
 
 # Load spatial data -------------------------------------------
 
 # Response data -------------------------------------------
-point_ep <- sf::st_read("raw-data/Epizootic_Events_Circuit.shp")
+epizootic <- sf::st_read("data-raw/Epizootic_Events_Circuit.shp")
 
 # Landscape layers -------------------------------------------
 
@@ -25,8 +27,8 @@ polygon_cities <- geobr::read_municipality(
 
 # load land cover layer -------------------------------------------
 geotiff_files <- paste0(
-  "raw-data/cobertura-municipios/",
-  list.files("raw-data/cobertura-municipios/")
+  "data-raw/cobertura-municipios/",
+  list.files("data-raw/cobertura-municipios/")
 )
 
 geotiff_cover <- purrr::map(
