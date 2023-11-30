@@ -10,20 +10,20 @@
 # Load data -------------------------------------------
 source(here::here("data-raw/load-spatial-data.R"))
 source(here::here("data/transform-spatial-data.R"))
-cities_cover <- terra::rast(here::here("data/cities-cover.tif"))
-
-# Load packages -------------------------------------------
-source(here::here("R/dependencies.R"))
+cities_cover1 <- raster::raster(here::here("data/cities-cover.tif"))
 
 # Transform raster data -------------------------------------------
 
-# create a filter for cities of interest
-cities_filter <- c(sort(unique(point_ep$name_muni)[-c(1, 19)]),
-                  "FRANCISCO MORATO", "HORTOLÂNDIA",
-                  "JOANÓPOLIS", "LOUVEIRA",
-                  "SUMARÉ")
+# select valid raster layers ----------------------------------------------
+# geotiff_cover <- geotiff_cover[-c(1, 8, 11, 14, 16, 25, 28)]
 
-# renomear a lista
+# create a filter for cities of interest
+# cities_filter2 <- sort(c(unique(point_ep$MUN),
+#                     "FRANCISCO MORATO", "HORTOLÂNDIA",
+#                     "JOANÓPOLIS", "LOUVEIRA",
+#                     "SUMARÉ", "VARGEM"))
+
+# rename list itens
 names(geotiff_cover) <- sort(cities_filter)
 
 # reclassify
@@ -50,20 +50,21 @@ cover_reclass <- purrr::map(
 
 # select valid objects in the list
 cover_reclass2 <- cover_reclass[-c(1, 23, 28)]
+
 # Create a single raster with all cities -------------------------------------------
 # create an empty raster object
-cities_cover <- raster()
+cities_cover2 <- raster::raster()
 
 # add a new extent
-extent(cities_cover) <- extent(cover_reclass2$ATIBAIA)
+raster::extent(cities_cover2) <- raster::extent(cover_reclass2$ATIBAIA)
 
 # add a new resolution
-res(cities_cover) <- res(cover_reclass2$ATIBAIA)
+raster::res(cities_cover2) <- raster::res(cover_reclass2$ATIBAIA)
 
 # crerate new raster
 for (i in 1:length(cover_reclass2)) {
-  cities_cover <- merge(
-    cities_cover,
+  cities_cover2 <- merge(
+    cities_cover2,
     cover_reclass2[[i]], 
     overlay = TRUE
   )
