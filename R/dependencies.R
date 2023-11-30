@@ -15,11 +15,13 @@ library(geobr)
 library(ggplot2)
 library(here)
 library(landscapemetrics)
+library(MuMIn)
 library(purrr)
 library(raster)
 library(sf)
 library(sp)
 library(terra)
+library(tibble)
 library(tidyr)
 library(tmap) # for static and interactive maps
 
