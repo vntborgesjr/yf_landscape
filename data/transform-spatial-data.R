@@ -7,27 +7,27 @@
 #                                             #
 ##%#########################################%##
 
+# The objective of the script is to generate all point and polygon spatial data
+# to conduct data analysis
+
 # Load data -------------------------------------------
 source(here::here("data-raw/load-spatial-data.R"))
-
-# Load packages -------------------------------------------
-source(here::here("R/dependencies.R"))
 
 # Transform spatial data -------------------------------------------
 
 # Define coordinate reference system -------------------------------------------
-novo_crs <- CRS("+proj=longlat +datum=WGS84 +no_defs")
+novo_crs <- sp::CRS("+proj=longlat +datum=WGS84 +no_defs")
   # CRS("EPSG:31983")
 
 # convert shapefile objects to the same crs -------------------------------------------
 # epizooties events
-point_ep <- st_transform(
-  point_ep,
+point_ep <- sf::st_transform(
+  epizootic,
   novo_crs
 )
 
 # cities polygon
-polygon_cities <- st_transform(
+polygon_cities <- sf::st_transform(
   polygon_cities,
   novo_crs
 )
@@ -35,16 +35,16 @@ polygon_cities <- st_transform(
 # Polygon and point data with epizooties and cities limits -------------------------------------------
 
 # create a filter for cities of interest
-cities_filter_polygons <- c(sort(unique(point_ep$MUN))[-c(1, 19)],
-                   "FRANCISCO MORATO", "HORTOLÂNDIA",
-                   "JOANÓPOLIS", "LOUVEIRA",
-                   "SUMARÉ")
+cities_filter <- sort(c(unique(point_ep$MUN),
+                        "FRANCISCO MORATO", "HORTOLÂNDIA",
+                        "JOANÓPOLIS", "LOUVEIRA",
+                        "SUMARÉ", "VARGEM"))
 
 # filter points by cities names
 point_ep <- point_ep |> 
   dplyr::select(1, 8, 9, 10, 11, 12, 14) |> 
   dplyr::filter(MUN %in% cities_filter) |> 
-  rename(
+  dplyr::rename(
     id = ID,
     name_muni = MUN,
     animais = Animais,
@@ -53,7 +53,7 @@ point_ep <- point_ep |>
     data = Data,
     ano = ANO
   ) |>
-  mutate(
+  dplyr::mutate(
     status = fct_recode(
       status,
       Positive = "positivo",
@@ -72,13 +72,13 @@ filtered_polygon_cities <- polygon_cities |>
 
 # join ep events and cities polygons
 ep_cities <- filtered_polygon_cities |> 
-  st_join(
+  sf::st_join(
     point_ep,
     left = TRUE
   )
 
 # Epizootic event exploration data -------------------------------------------
 exploration_point_ep <- point_ep |> 
-  filter(name_muni %in% cities_filter)
+  dplyr::filter(name_muni %in% cities_filter)
 
 # rm(list = ls())
