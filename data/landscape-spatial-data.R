@@ -11,9 +11,6 @@
 source(here::here("data/transform-spatial-data.R"))
 source(here::here("data/transform-raster-data.R"))
 
-# Load packages -------------------------------------------
-source(here::here("R/dependencies.R"))
-
 # Data for mapping buffers and crop raster -------------------------------------------
 # define buffer sizes
 buffer1 <- 40
@@ -26,7 +23,7 @@ buffer7 <- 5000
 
 # define buffers around point and each point an item of a list
 # 40 meters
-buffer_points1 <- st_buffer(
+buffer_points1 <- sf::st_buffer(
   point_ep, 
   dist = buffer1
 ) |> 
@@ -36,7 +33,7 @@ buffer_points1 <- st_buffer(
 names(buffer_points1) <- point_ep$ID
 
 # 100 meters
-buffer_points2 <- st_buffer(
+buffer_points2 <- sf::st_buffer(
   point_ep, 
   dist = buffer2
 ) |> 
@@ -46,7 +43,7 @@ buffer_points2 <- st_buffer(
 names(buffer_points2) <- point_ep$ID
 
 # 200 meters
-buffer_points3 <- st_buffer(
+buffer_points3 <- sf::st_buffer(
   point_ep, 
   dist = buffer3
 ) |> 
@@ -56,7 +53,7 @@ buffer_points3 <- st_buffer(
 names(buffer_points3) <- point_ep$ID
 
 # 400 meters
-buffer_points4 <- st_buffer(
+buffer_points4 <- sf::st_buffer(
   point_ep, 
   dist = buffer4
 ) |> 
@@ -66,7 +63,7 @@ buffer_points4 <- st_buffer(
 names(buffer_points4) <- point_ep$ID
 
 # 1000 meters
-buffer_points5 <- st_buffer(
+buffer_points5 <- sf::st_buffer(
   point_ep, 
   dist = buffer5
 ) |> 
@@ -76,7 +73,7 @@ buffer_points5 <- st_buffer(
 names(buffer_points5) <- point_ep$ID
 
 # 2000 meters
-buffer_points6 <- st_buffer(
+buffer_points6 <- sf::st_buffer(
   point_ep, 
   dist = buffer6
 ) |> 
@@ -86,7 +83,7 @@ buffer_points6 <- st_buffer(
 names(buffer_points6) <- point_ep$ID
 
 # 5000 meters
-buffer_points7 <- st_buffer(
+buffer_points7 <- sf::st_buffer(
   point_ep, 
   dist = buffer7
 ) |> 
@@ -100,7 +97,7 @@ names(buffer_points7) <- point_ep$ID
 buffer5000 <- buffer_points7 |> 
   purrr::map(
     \(.x) terra::crop(
-      cities_cover,
+      cities_cover2,
       .x
     )
   ) |> 
