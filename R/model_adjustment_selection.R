@@ -1,12 +1,11 @@
-model_adjustment_selection <- function(data,
-                                models,
-                                FUN,
-                                family,
-                                rank = NULL,
-                                beta = "none") {
-  # load packages
-  library(tibble)
-  library(MuMIn)
+model_adjustment_selection <- function(
+    data,
+    models,
+    FUN,
+    family,
+    rank = NULL,
+    beta = "none"
+  ) {
   
   # create the object to receivve the models
   models_results <- list()
