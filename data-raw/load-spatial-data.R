@@ -7,6 +7,8 @@
 #                                             #
 ##%#########################################%##
 
+# The objective of the script is to load all data needed to the analyses
+
 # Load packages -------------------------------------------
 source(here::here("R/dependencies.R"))
 
