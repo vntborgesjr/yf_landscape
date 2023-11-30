@@ -8,7 +8,7 @@
 ##%#########################################%##
 
 # Load data -------------------------------------------
-source(here::here("data/landscape-metrics.R"))
+source(here::here("data-analysis/landscape-metrics.R"))
 
 # Load packages -------------------------------------------
 source(here::here("R/dependencies.R"))
