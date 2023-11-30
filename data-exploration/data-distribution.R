@@ -10,9 +10,6 @@
 # Load data -------------------------------------------
 source(here::here("data/transform-landscape-data.R"))
 
-# Load packages -------------------------------------------
-source(here::here("R/dependencies.R"))
-
 # Load functions -------------------------------------------
 source(here::here("R/box_dot_histplot1.R"))
 source(here::here("R/my_hist.R"))
@@ -89,29 +86,36 @@ point_ep <- sf::st_transform(
 data_dist <- data.frame(sf::st_distance(point_ep))
 mean_data_dist <- data_dist |>
   dplyr::summarise(
-    dplyr::across(1:482), 
+    dplyr::across(1:449), 
     list(mean = mean),
     .names = "x"
     )
 
 library(units)
-mean_dist_ep_points <- mean_data_dist["X482"] |> 
+mean_dist_ep_points <- mean_data_dist["X449"] |> 
   my_hist(
-    x = X482,
+    x = X449,
     binwidth = 5,
     xlab = "Distance between sampling points",
-    ylab = "Frequência"
+    ylab = "Frequency",
+    fill = "white",
+    xfrom = 0,
+    xto = 95, 
+    xby = 5,
+    yfrom = 0,
+    yto = 60, 
+    yby = 10
   ) +
-  scale_x_units(unit = "km")
+  units::scale_x_units(unit = "km", breaks = seq(0, 95, 5))
   
 # save patch number distribution on disk -------------------------------------------
 # ggplot2::ggsave(
 #   plot = mean_dist_ep_points,
-#   filename = "output/mean_dist_ep_points.jpeg",
+#   filename = "output/figs2-mean-dist-ep-points.jpeg",
 #   height = 15,
 #   width = 30,
 #   units = "cm",
-#   dpi = 50
+#   dpi = 100
 # )
 
 # number of PNH of each genus -------------------------------------------
