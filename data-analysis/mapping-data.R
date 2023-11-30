@@ -9,10 +9,8 @@
 
 # Load data -------------------------------------------
 source(here::here("data/transform-spatial-data.R"))
+# source(here::here("data/transform-raster-data.R"))
 cities_cover <- raster::raster(here::here("data/cities-cover.tif"))
-
-# Load packages -------------------------------------------
-source(here::here("R/dependencies.R"))
 
 # New limits -------------------------------------------
 new_limits <- st_bbox(filtered_polygon_cities) + 
