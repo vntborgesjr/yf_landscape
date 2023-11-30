@@ -10,9 +10,6 @@
 # Load data -------------------------------------------
 source(here::here("data/transform-landscape-data.R"))
 
-# Load packages -------------------------------------------
-source(here::here("R/dependencies.R"))
-
 # Load functions -------------------------------------------
 source(here::here("R/xy_categoric_relation.R"))
 
