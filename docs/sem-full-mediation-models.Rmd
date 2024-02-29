@@ -1,0 +1,169 @@
+---
+title: "Untitled"
+author: "Vitor Borges"
+date: "2024-02-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Fit a full mediation model - linear relationship
+
+```{r}
+DiagrammeR::grViz("digraph {
+
+graph [layout = dot, rankdir = LR]
+
+# define the global styles of the nodes. We can override these in box if we wish
+node [shape = rectangle, style = filled, fillcolor = Linen]
+
+habitat [label =  'Habitat \n Amount']
+fragmentation [label = 'Habitat \n Fragmentation']
+epizootic [label= 'Epizootic \n events']
+
+# edge definitions with the node IDs
+habitat -> fragmentation -> epizootic
+}")
+```
+
+```{r}
+full_mediation_model1 <- psem(
+  glmmTMB(
+    formula = epizootic ~ edge_density + (1 | random),
+    data = data_ed,
+    family = binomial(link = "logit")
+  ),
+  glmmTMB(
+    formula = edge_density ~ forest_cover + (1 | random),
+    data = data_ed,
+    family = "gaussian",
+    dispformula = ~ 0
+  ),
+  data = data_ed
+)
+```
+
+```{r}
+summary(full_mediation_model1)
+```
+
+### Fit a full mediation model - quadratic term
+
+```{r}
+full_mediation_model2 <- psem(
+  glmmTMB(
+    formula = epizootic ~ edge_density + (1 | random),
+    data = data_ed2,
+    family = binomial(link = "logit")
+  ),
+  glmmTMB(
+    formula = edge_density ~ forest_cover1 + forest_cover2 + (1 | random),
+    data = data_ed2,
+    family = "gaussian",
+    dispformula = ~ 0
+  ),
+  data = data_ed2
+)
+```
+
+```{r}
+summary(full_mediation_model2)
+```
+
+### Fit a partial mediation model - linear relationship
+
+```{r}
+partial_mediation_model1 <- psem(
+  glmmTMB(
+    formula = epizootic ~ edge_density + forest_cover + (1 | random),
+    data = data_ed,
+    family = binomial(link = "logit")
+  ),
+  glmmTMB(
+    formula = edge_density ~ forest_cover + (1 | random),
+    data = data_ed,
+    family = "gaussian",
+    dispformula = ~ 0
+  ),
+  data = data_ed
+)
+```
+
+```{r}
+summary(partial_mediation_model1)
+```
+
+## Fragmentation measure - number of patches
+
+### Fit a full mediation model - linear relationship
+
+```{r}
+full_mediation_model3 <- psem(
+  glmmTMB(
+    formula = epizootic ~ n_patches + (1 | random),
+    data = data_np,
+    family = binomial(link = "logit")
+  ),
+  glmmTMB(
+    formula = n_patches ~ forest_cover + (1 | random) + exp(coords + 0 | group),
+    data = data_np,
+    family = "gaussian",
+    dispformula = ~ 0
+  ),
+  data = data_np
+)
+```
+
+```{r}
+summary(full_mediation_model3)
+```
+
+### Fit a full mediation model - quadratic term
+
+```{r}
+full_mediation_model4 <- psem(
+  glmmTMB(
+    formula = epizootic ~ n_patches + (1 | random),
+    data = data_np2,
+    family = binomial(link = "logit")
+  ),
+  glmmTMB(
+    formula = n_patches ~ forest_cover1 + forest_cover2 + (1 | random) + exp(coords + 0 | group),
+    data = data_np2,
+    family = "gaussian",
+    dispformula = ~ 0
+  ),
+  data = data_np2
+)
+```
+
+```{r}
+summary(full_mediation_model4)
+```
+
+### Fit a partial mediation model - linear relationship
+
+```{r}
+partial_mediation_model3 <- psem(
+  glmmTMB(
+    formula = epizootic ~ n_patches + forest_cover + (1 | random),
+    data = data_np,
+    family = binomial(link = "logit")
+  ),
+  glmmTMB(
+    formula = n_patches ~ forest_cover + (1 | random) + exp(coords + 0 | group),
+    data = data_np,
+    family = "gaussian",
+    dispformula = ~ 0
+  ),
+  data = data_np
+)
+```
+
+```{r}
+summary(partial_mediation_model3)
+```
+
+

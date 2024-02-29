@@ -143,6 +143,9 @@ Gradiente total
 - resultado indica que a partir de um ponto da intensidade da cobertura florestal a fragmentação diminui (como mostrado no gráfico) e a probabilidade de ocorrência de eventos de epizootias também diminui
 
 Gradiente Intervalos de gradiente (medida de fragmentação - densidade de borda - resultados se repetem pra número de manchas)
+# < 30% - 342
+# 30%-60% - 84
+# > 60% - 23
 < 30%
 - efeito direto da cobertura florestal favorece ocorrencia de epizootia (0.35, p = 0.13) 
 - efeito direto da fragmentação também favorece ocorrencia de epizootia (0.15, p = 0.47)
@@ -161,6 +164,7 @@ Gradiente Intervalos de gradiente (medida de fragmentação - densidade de borda
 O resultado da análise conduzida em difrentes gradientes corroboram a hipótese de que acima de 60% de intensidade de cobertura vegetal um acréscimo na quantidade de habitat reduz as chances de ocorrências de eventos de epizootias, seja pelo seu efeito direto, seja pelo seu efeito mediado pela redução do grau de fragmentação.
 
 Uma implicação importante é que não se pode avaliar estratégias de conservação e manejo da paisagem sem levar em consideração a dimensão do risco de zoonoses. Mesmo que a fragmentação aumente níveis de biodiversidade, ela também eleva o risco de ocorrência de eventos de epizootia, especialmente em paisagens com menons de 30% e mais de 60%
+
 ## Fragmentation measure - number of patches
 
 ### Fit a partial mediation model - quadratic term
