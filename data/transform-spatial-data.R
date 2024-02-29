@@ -1,23 +1,24 @@
-##%#########################################%##
-#                                             #
-####              Tidy data                ####
-####       Transform spatial data          ####
-####        Vitor Borges-Júnior            ####
-####       Created on 04 Oct 2023          ####
-#                                             #
-##%#########################################%##
+##%#####################################################################%##
+#                                                                         #
+####                              Tidy data                            ####
+####                        Transform spatial data                     ####
+####                          Vitor Borges-Júnior                      ####
+####                        Created on 04 Oct 2023                     ####
+#                                                                         #
+##%#####################################################################%##
 
-# The objective of the script is to generate all point and polygon spatial data
-# to conduct data analysis
+# Objective -------------------------------------------
+# The objective of the script is to generate all point and polygon spatial 
+# data to conduct data analysis and mapping
 
 # Load data -------------------------------------------
-source(here::here("data-raw/load-spatial-data.R"))
+source(here::here("data/load-spatial-data.R"))
 
 # Transform spatial data -------------------------------------------
 
 # Define coordinate reference system -------------------------------------------
-novo_crs <- sp::CRS("+proj=longlat +datum=WGS84 +no_defs")
-  # CRS("EPSG:31983")
+novo_crs <- terra::crs("EPSG:31983")
+  # sp::CRS("+proj=longlat +datum=WGS84 +no_defs")
 
 # convert shapefile objects to the same crs -------------------------------------------
 # epizooties events
@@ -39,6 +40,9 @@ cities_filter <- sort(c(unique(point_ep$MUN),
                         "FRANCISCO MORATO", "HORTOLÂNDIA",
                         "JOANÓPOLIS", "LOUVEIRA",
                         "SUMARÉ", "VARGEM"))
+
+# exclude Amparo and Pinhalzinho
+cities_filter <- cities_filter[-c(1, 23, 28)]
 
 # filter points by cities names
 point_ep <- point_ep |> 
@@ -73,7 +77,7 @@ filtered_polygon_cities <- polygon_cities |>
 # join ep events and cities polygons
 ep_cities <- filtered_polygon_cities |> 
   sf::st_join(
-    point_ep,
+    y = point_ep,
     left = TRUE
   )
 

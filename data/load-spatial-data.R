@@ -1,13 +1,15 @@
-##%#########################################%##
-#                                             #
-####              Tidy data                ####
-####          Load spatial data            ####
-####        Vitor Borges-Júnior            ####
-####       Created on 04 Oct 2023          ####
-#                                             #
-##%#########################################%##
+##%#####################################################################%##
+#                                                                         #
+####                              Tidy data                            ####
+####                          Load spatial data                        ####
+####                         Vitor Borges-Júnior                       ####
+####                        Created on 04 Oct 2023                     ####
+#                                                                         #
+##%#####################################################################%##
 
-# The objective of the script is to load all data needed to the analysis
+# Objective -------------------------------------------
+# The objective of the script is to load all data needed to conduct the
+# analysis
 
 # Load packages -------------------------------------------
 source(here::here("R/dependencies.R"))

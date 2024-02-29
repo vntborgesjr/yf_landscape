@@ -1,28 +1,32 @@
-##%#########################################%##
-#                                             #
-####              Tidy data                ####
-####       Landscape spatial data          ####
-####        Vitor Borges-Júnior            ####
-####       Created on 11 Oct 2023          ####
-#                                             #
-##%#########################################%##
+##%#####################################################################%##
+#                                                                         #
+####                              Tidy data                            ####
+####                        Landscape spatial data                     ####
+####                          Vitor Borges-Júnior                      ####
+####                        Created on 11 Oct 2023                     ####
+#                                                                         #
+##%#####################################################################%##
+
+# Objective -------------------------------------------
+# The objective of the script is to generate all buffers (100, 200, 400, 
+# 800, 1000, 2000, 5000 m) to further extraction of landscape metrics 
 
 # Load data -------------------------------------------
-source(here::here("data/transform-spatial-data.R"))
+# source(here::here("data/transform-spatial-data.R"))
 source(here::here("data/transform-raster-data.R"))
 
 # Data for mapping buffers and crop raster -------------------------------------------
 # define buffer sizes
-buffer1 <- 40
-buffer2 <- 100
-buffer3 <- 200
-buffer4 <- 400
+buffer1 <- 100
+buffer2 <- 200
+buffer3 <- 400
+buffer4 <- 800
 buffer5 <- 1000
 buffer6 <- 2000
 buffer7 <- 5000
 
 # define buffers around point and each point an item of a list
-# 40 meters
+# 100 meters
 buffer_points1 <- sf::st_buffer(
   point_ep, 
   dist = buffer1
@@ -30,9 +34,9 @@ buffer_points1 <- sf::st_buffer(
   split(seq(nrow(point_ep)))
 
 # name items using animals id
-names(buffer_points1) <- point_ep$ID
+names(buffer_points1) <- point_ep$id
 
-# 100 meters
+# 200 meters
 buffer_points2 <- sf::st_buffer(
   point_ep, 
   dist = buffer2
@@ -40,9 +44,9 @@ buffer_points2 <- sf::st_buffer(
   split(seq(nrow(point_ep)))
 
 # name items using animals id
-names(buffer_points2) <- point_ep$ID
+names(buffer_points2) <- point_ep$id
 
-# 200 meters
+# 400 meters
 buffer_points3 <- sf::st_buffer(
   point_ep, 
   dist = buffer3
@@ -50,9 +54,9 @@ buffer_points3 <- sf::st_buffer(
   split(seq(nrow(point_ep)))
 
 # name items using animals id
-names(buffer_points3) <- point_ep$ID
+names(buffer_points3) <- point_ep$id
 
-# 400 meters
+# 800 meters
 buffer_points4 <- sf::st_buffer(
   point_ep, 
   dist = buffer4
@@ -60,7 +64,7 @@ buffer_points4 <- sf::st_buffer(
   split(seq(nrow(point_ep)))
 
 # name items using animals id
-names(buffer_points4) <- point_ep$ID
+names(buffer_points4) <- point_ep$id
 
 # 1000 meters
 buffer_points5 <- sf::st_buffer(
@@ -70,7 +74,7 @@ buffer_points5 <- sf::st_buffer(
   split(seq(nrow(point_ep)))
 
 # name items using animals id
-names(buffer_points5) <- point_ep$ID
+names(buffer_points5) <- point_ep$id
 
 # 2000 meters
 buffer_points6 <- sf::st_buffer(
@@ -80,7 +84,7 @@ buffer_points6 <- sf::st_buffer(
   split(seq(nrow(point_ep)))
 
 # name items using animals id
-names(buffer_points6) <- point_ep$ID
+names(buffer_points6) <- point_ep$id
 
 # 5000 meters
 buffer_points7 <- sf::st_buffer(
@@ -90,7 +94,7 @@ buffer_points7 <- sf::st_buffer(
   split(seq(nrow(point_ep)))
 
 # name items using animals id
-names(buffer_points7) <- point_ep$ID
+names(buffer_points7) <- point_ep$id
 
 # Crop ans mask land cover layer -------------------------------------------
 # crop and mask raster to the same extent of 5000m buffer layer
@@ -143,8 +147,8 @@ buffer1000 <- buffer2000 |>
     )
   )
 
-# crop and mask raster to the same extent of 400m buffer layer
-buffer400 <- buffer1000 |> 
+# crop and mask raster to the same extent of 800m buffer layer
+buffer800 <- buffer1000 |> 
   purrr::map2(
     buffer_points4,
     \(.x, .y) terra::crop(
@@ -161,7 +165,7 @@ buffer400 <- buffer1000 |>
   )
 
 # crop and mask raster to the same extent of 200m buffer layer
-buffer200 <- buffer400 |> 
+buffer400 <- buffer800 |> 
   purrr::map2(
     buffer_points3,
     \(.x, .y) terra::crop(
@@ -171,6 +175,23 @@ buffer200 <- buffer400 |>
   ) |> 
   purrr::map2(
     buffer_points3,
+    \(.x, .y) terra::mask(
+      x = .x,
+      mask = .y
+    )
+  )
+
+# crop and mask raster to the same extent of 200m buffer layer
+buffer200 <- buffer400 |> 
+  purrr::map2(
+    buffer_points2,
+    \(.x, .y) terra::crop(
+      .x,
+      .y
+    )
+  ) |> 
+  purrr::map2(
+    buffer_points2,
     \(.x, .y) terra::mask(
       x = .x,
       mask = .y
@@ -179,23 +200,6 @@ buffer200 <- buffer400 |>
 
 # crop and mask raster to the same extent of 100m buffer layer
 buffer100 <- buffer200 |> 
-  purrr::map2(
-    buffer_points2,
-    \(.x, .y) terra::crop(
-      .x,
-      .y
-    )
-  ) |> 
-  purrr::map2(
-    buffer_points2,
-    \(.x, .y) terra::mask(
-      x = .x,
-      mask = .y
-    )
-  )
-
-# crop and mask raster to the same extent of 40m buffer layer
-buffer40 <- buffer100 |> 
   purrr::map2(
     buffer_points1,
     \(.x, .y) terra::crop(

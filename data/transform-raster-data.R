@@ -1,24 +1,26 @@
-##%#########################################%##
-#                                             #
-####              Tidy data                ####
-####       Transform raster data           ####
-####        Vitor Borges-Júnior            ####
-####       Created on 04 Oct 2023          ####
-#                                             #
-##%#########################################%##
+##%#####################################################################%##
+#                                                                         #
+####                              Tidy data                            ####
+####                        Transform raster data                      ####
+####                          Vitor Borges-Júnior                      ####
+####                        Created on 04 Oct 2023                     ####
+#                                                                         #
+##%#####################################################################%##
+
+# Objective -------------------------------------------
+# The objective of the script is to generate all raster data nedeed to 
+# conduct data analysis and mapping
 
 # Load data -------------------------------------------
-source(here::here("data-raw/load-spatial-data.R"))
 source(here::here("data/transform-spatial-data.R"))
-cities_cover1 <- raster::raster(here::here("data/cities-cover.tif"))
 
 # Transform raster data -------------------------------------------
 
 # select valid raster layers ----------------------------------------------
-# geotiff_cover <- geotiff_cover[-c(1, 8, 11, 14, 16, 25, 28)]
+geotiff_cover <- geotiff_cover[-c(1, 23, 28)]
 
 # create a filter for cities of interest
-# cities_filter2 <- sort(c(unique(point_ep$MUN),
+# cities_filter2 <- sort(c(unique(point_ep$name_muni),
 #                     "FRANCISCO MORATO", "HORTOLÂNDIA",
 #                     "JOANÓPOLIS", "LOUVEIRA",
 #                     "SUMARÉ", "VARGEM"))
@@ -48,27 +50,28 @@ cover_reclass <- purrr::map(
   )
 )
 
-# select valid objects in the list
-cover_reclass2 <- cover_reclass[-c(1, 23, 28)]
-
 # Create a single raster with all cities -------------------------------------------
-# create an empty raster object
-cities_cover2 <- raster::raster()
 
-# add a new extent
-raster::extent(cities_cover2) <- raster::extent(cover_reclass2$ATIBAIA)
-
-# add a new resolution
-raster::res(cities_cover2) <- raster::res(cover_reclass2$ATIBAIA)
-
-# crerate new raster
-for (i in 1:length(cover_reclass2)) {
-  cities_cover2 <- merge(
-    cities_cover2,
-    cover_reclass2[[i]], 
-    overlay = TRUE
+# convert to class SpatRaster
+cover_reclass2 <- list()
+cover_reclass2 <- cover_reclass |> 
+  purrr::map2(
+    seq_along(cover_reclass),
+    \(.x, .y) cover_reclass2[[.y]] <- terra::rast(.x)
   )
-}
+
+# create a SpatRasterCollection
+cover_reclass3 <- terra::sprc(cover_reclass2)
+
+# merge the SpatRasterCollection to a SpatRaster object
+cities_cover <- terra::merge(cover_reclass3)
+
+# convert raster from geographic to projected  --------
+cities_cover2 <- terra::project(
+  x = cities_cover, 
+  y = terra::crs("EPSG:31983"),
+  method = "near"
+)
 
 # Write raster as geotiff file -------------------------------------------
 # writeRaster(
@@ -77,38 +80,15 @@ for (i in 1:length(cover_reclass2)) {
 #   format = "GTiff"
 # )
 
-# geotiff_cover_croped <- crop(
-#   x = geotiff_cover,
-#   y = point_ep
+# terra::writeRaster(
+#   cities_cover2,
+#   filename = "data/cities-cover2.tif"
 # )
-
-# Transform raster to polygon -------------------------------------------
-# cover_polygon <- rasterToPolygons(
-#   x = cities_cover,
-#   fun = \(.x) .x > 0
-# )
-# memória insuficiente
-# # Attribute a new extent -------------------------------------------
-# new_limits <- st_bbox(filtered_polygon_cities) + 
-#   c(0, 0, 1.5, 1.5)
-# extent(cover_polygon) <- new_limits
 
 # Arquivos geotiff com problema
 # AMPARO
-# PEDREIRA
-# PIRACAIA
+# PINHALZINHO
 # VARGEM
-# # # convert raster object to the same crs -------------------------------------------
-# crs(geotiff_cover) <- crs
-# 
-# # land cover
-# geotiff_cover <- projectRaster(
-#   geotiff_cover,
-#   crs = projection(crs),
-#   res = yres(geotiff_cover),
-#   method = "ngb"
-# )
-
 # Change names of classification -------------------------------------------
 # "Water" <- c(26, 31, 33)
 # "Agricultural" <- c(
@@ -128,5 +108,5 @@ for (i in 1:length(cover_reclass2)) {
 #   dissolve = TRUE
 # )
 # plot(teste)
-# 
+
 # rm(list = ls())

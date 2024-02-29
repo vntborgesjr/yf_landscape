@@ -1,0 +1,27 @@
+---
+title: "Relação entre Quantidade de Habitat, sua Configuração e o Risco de Zoonoses: Estudo de Caso Utilizando a Febre"
+format: revealjs
+editor: visual
+---
+
+## Objetivo
+
+Avaliar efeitos diretos e indiretos da perda de habitat mediados pela sua fragmentação
+
+## Área de estudo
+
+-   30 municípios do estado de SP
+
+-   551 casos entre 2016 e 2018
+
+-   222 negativos e 328 positivos
+
+## 
+
+## Code
+
+When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```

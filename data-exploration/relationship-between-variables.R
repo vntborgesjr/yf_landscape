@@ -8,7 +8,8 @@
 ##%#########################################%##
 
 # Load data -------------------------------------------
-source(here::here("data/transform-landscape-data.R"))
+# source(here::here("data/transform-landscape-data.R"))
+load(here::here("ep_landscape_metrics_transformed.RData"))
 
 # Load functions -------------------------------------------
 source(here::here("R/xy_categoric_relation.R"))
@@ -78,6 +79,51 @@ ep_edge_density <- ep_ed |>
 #   width = 30,
 #   units = "cm",
 #   dpi = 50
+# )
+
+# relationship between number of patches and habitat amount ----------
+
+np_ha_continuous <- xy_continuous_relation(
+  data = ep_landscape_metrics_transformed, 
+  x = pland200,
+  y = np200,
+  xlab = "Habitat amount [%]",
+  ylab = "Number of patches"
+)
+
+np_ha_continuous
+
+# save relationship between number of patches and habitat amount on disk -------------------------------------------
+# ggplot2::ggsave(
+#   plot = np_ha_continuous,
+#   filename = "output/np-ha-continuous.jpeg",
+#   height = 15,
+#   width = 15,
+#   units = "cm",
+#   dpi = 100
+# )
+
+# relationship between edge density and habitat amount ----------
+
+ed_ha_continuous <- xy_continuous_relation(
+  data = ep_landscape_metrics_transformed, 
+  x = pland200,
+  y = ed200,
+  tag = "b",
+  xlab = "Habitat amount [%]",
+  ylab = "Edge density [m/ha]"
+)
+
+ed_ha_continuous
+
+# save relationship between edge density and habitat amount on disk -------------------------------------------
+# ggplot2::ggsave(
+#   plot = ed_ha_continuous,
+#   filename = "output/ed-ha-continuous.jpeg",
+#   height = 15,
+#   width = 15,
+#   units = "cm",
+#   dpi = 100
 # )
 
 # number of PNH of each genus -------------------------------------------

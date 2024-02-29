@@ -1,16 +1,19 @@
-##%#########################################%##
-#                                             #
-####           Data analysis               ####
-####           Mapping data                ####
-####        Vitor Borges-Júnior            ####
-####       Created on 04 Oct 2023          ####
-#                                             #
-##%#########################################%##
+##%#####################################################################%##
+#                                                                         #
+####                             Data analysis                         ####
+####                             Mapping data                          ####
+####                          Vitor Borges-Júnior                      ####
+####                         Created on 04 Oct 2023                    ####
+#                                                                         #
+##%#####################################################################%##
+
+# Objectives ------------------------------------------
+# # The objectives of the script are...
 
 # Load data -------------------------------------------
-source(here::here("data/transform-spatial-data.R"))
+# source(here::here("data/transform-spatial-data.R"))
 # source(here::here("data/transform-raster-data.R"))
-cities_cover <- raster::raster(here::here("data/cities-cover.tif"))
+# cities_cover <- raster::raster(here::here("data/cities-cover.tif"))
 
 # New limits -------------------------------------------
 new_limits <- st_bbox(filtered_polygon_cities) + 
@@ -20,7 +23,8 @@ new_limits <- st_bbox(filtered_polygon_cities) +
 # city limits layer
 city_limits_layer1 <- tm_shape(
   polygon_cities, 
-  bbox = new_limits
+  bbox = new_limits,
+  crs = crs(cities_cover)
 ) +
   tm_borders(
     col = "grey",
@@ -29,7 +33,8 @@ city_limits_layer1 <- tm_shape(
 
 city_limits_layer2 <- tm_shape(
   filtered_polygon_cities, 
-  bbox = new_limits
+  bbox = new_limits,
+  crs = crs(cities_cover)
 ) +
   tm_borders(
     col = "grey",
@@ -68,10 +73,10 @@ land_cover_layer <- tm_shape(
       n.max = 2,
       values = c("white", "green"),
       levels = c(0, 1),
-      labels = c("Não floresta", "Floresta")
+      labels = c("Non-forest", "Forest")
     ),
     col.legend = tm_legend(
-      title = "Legenda",
+      title = "Legend",
       width = 7.5,
       height = 5,
       position = tm_pos_in(
@@ -86,7 +91,7 @@ land_cover_layer <- tm_shape(
 
 # Grid layer -------------------------------------------
 grid_layer <- tm_grid(
-  crs = projection(cities_cover),
+  crs = crs(cities_cover),
   lines = FALSE, 
   labels.rot = c(0, 90),
   labels.cardinal = TRUE
@@ -118,7 +123,7 @@ study_area_map <- land_cover_layer +
 
 study_area_map  
 
-tmap_mode("view")
+tmap_mode("plot")
 
 # Save study area map on disk -------------------------------------------
 

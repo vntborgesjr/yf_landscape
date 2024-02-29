@@ -116,7 +116,7 @@ mean_dist_ep_points <- mean_data_dist["X449"] |>
 #   width = 30,
 #   units = "cm",
 #   dpi = 100
-# )
+# )               
 
 # number of PNH of each genus -------------------------------------------
 point_ep |> 
