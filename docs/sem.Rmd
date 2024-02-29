@@ -1,0 +1,612 @@
+---
+title: "Untitled"
+author: "Vitor Borges"
+date: "2024-02-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# load data
+load(here::here("ep_landscape_metrics_transformed.RData"))
+
+# load packages
+library(DiagrammeR)
+library(glmmTMB)
+library(piecewiseSEM)
+library(tibble)
+
+# generate data
+data_ed <- tibble(
+  forest_cover = ep_landscape_metrics_transformed$pland200,
+  forest_cover1 = poly(
+  ep_landscape_metrics_transformed$pland200, 2, raw = FALSE
+)[, 1],
+  forest_cover2 = poly(
+  ep_landscape_metrics_transformed$pland200, 2, raw = FALSE
+)[, 2],
+  edge_density = ep_landscape_metrics_transformed$ed200,
+  edge_density1 = poly(
+  ep_landscape_metrics_transformed$ed200, 2, raw = FALSE
+)[, 1],
+  edge_density2 = poly(
+  ep_landscape_metrics_transformed$ed200, 2, raw = FALSE
+)[, 2],
+  epizootic = ep_landscape_metrics_transformed$status,
+  random = ep_landscape_metrics_transformed$random,
+  group = ep_landscape_metrics_transformed$group,
+  coords = ep_landscape_metrics_transformed$coords
+)
+
+data_np <- tibble(
+  forest_cover = ep_landscape_metrics_transformed$pland200,
+  forest_cover1 = poly(
+  ep_landscape_metrics_transformed$pland200, 2, raw = FALSE
+)[, 1],
+  forest_cover2 = poly(
+  ep_landscape_metrics_transformed$pland200, 2, raw = FALSE
+)[, 2],
+  n_patches = ep_landscape_metrics_transformed$np200,
+  n_patches1 = poly(
+  ep_landscape_metrics_transformed$np200, 2, raw = FALSE
+)[, 1],
+  n_patches2 = poly(
+  ep_landscape_metrics_transformed$np200, 2, raw = FALSE
+)[, 2],
+  epizootic = ep_landscape_metrics_transformed$status,
+  random = ep_landscape_metrics_transformed$random,
+  group = ep_landscape_metrics_transformed$group,
+  coords = ep_landscape_metrics_transformed$coords
+)
+
+data_np_lower_gradient <- data_np |> 
+  filter(forest_cover < 30)
+
+data_np_upper_gradient <- data_np |> 
+  filter(forest_cover > 60)
+
+data_np_middle_gradient <- data_np |> 
+  filter(
+    forest_cover > 30,
+    forest_cover < 60
+  )
+
+```
+
+## Model fitting using a piecewiseSEM - glmmTMB
+
+## Fragmentation measure - edge density
+
+### Fit a partial mediation model - quadratic term
+
+```{r}
+partial_mediation_model1 <- psem(
+  glmmTMB(
+    formula = epizootic ~ edge_density + forest_cover1 + (1 | random),
+    data = data_ed,
+    family = binomial(link = "logit")
+  ),
+  glmmTMB(
+    formula = edge_density ~ forest_cover1 + forest_cover2 + (1 | random),
+    data = data_ed,
+    family = "gaussian",
+    dispformula = ~ 0
+  ),
+  data = data_ed
+)
+```
+
+```{r}
+summary(partial_mediation_model1)
+```
+
+```{r}
+grViz("digraph {
+
+graph [layout = dot, rankdir = LR]
+
+# define the global styles of the nodes. We can override these in box if we wish
+node [shape = ellipse, overlap = TRUE, shape = box, style = filled, fillcolor = YellowGreen]
+habitat2; habitat1; fragmentation; epizootic
+
+habitat2 [shape = ellipse, label =  'FC²', fontsize = 18, fontname = Serif, penwidth = 2, width = 2, height = 1]
+habitat1 [shape = ellipse, label =  'FC', fontsize = 18, fontname = Serif, penwidth = 2, width = 2, height = 1]
+fragmentation [shape = ellipse, label = 'ED \n R² = 0.86', fontsize = 18, fontname = Serif, penwidth = 2]
+epizootic [shape = ellipse, label= 'Epizootic event \n R² = 0.14 \n C = 6.735 p = 0.034', fontsize = 18, fontname = Serif, penwidth = 2]
+
+# define the global styles of the nodes 2.
+node [shape = box, overlap = TRUE, shape = box, fillcolor = White]
+coef_habitat3; coef_habitat2; coef_habitat1; coef_frag
+
+coef_habitat3 [label = '0.21 \n p = 0.05', fontsize = 12, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
+coef_habitat2 [label = '-0.56 \n p < 0.0001', fontsize = 12, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
+coef_habitat1 [label = '0.74 \n p < 0.0001', fontsize = 12, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
+coef_frag[label = '0.94 \n p = 0.01', fontsize = 12, fontname = Serif, fillcolor = White, penwidth = 0.5]
+
+# edge definitions with the node IDs
+habitat2 -> coef_habitat2[penwidth = 5, arrowhead = none, style = dashed, color = Red]
+coef_habitat2 -> fragmentation[penwidth = 5, style = dashed, color = Red]
+habitat1 -> coef_habitat1[penwidth = 5, arrowhead = none, color = Blue]
+coef_habitat1 -> fragmentation[penwidth = 5, color = Blue]
+fragmentation -> coef_frag[penwidth = 5, arrowhead = none, color = Blue]
+coef_frag -> epizootic[penwidth = 5, color = Blue]
+habitat1 -> coef_habitat3[penwidth = 5, arrowhead = none, color = Blue]
+coef_habitat3 -> epizootic[penwidth = 5, color = Blue]
+}")
+
+```
+Resumo dos resultados (Febre amarela)
+Gradiente total
+- efeito direto da cobertura florestal favorece ocorrencia de epizootia (0.21, p = 0.05) 
+- efeito direto da fragmentação também favorece ocorrencia de epizootia (0.73, p < 0.0001)
+- efeito indireto da cobertura floresta, mediado pela fragmentação desfavorece a ocorrência de eízootia (-0.39)
+- resultado indica que a partir de um ponto da intensidade da cobertura florestal a fragmentação diminui (como mostrado no gráfico) e a probabilidade de ocorrência de eventos de epizootias também diminui
+
+Gradiente Intervalos de gradiente (medida de fragmentação - densidade de borda - resultados se repetem pra número de manchas)
+< 30%
+- efeito direto da cobertura florestal favorece ocorrencia de epizootia (0.35, p = 0.13) 
+- efeito direto da fragmentação também favorece ocorrencia de epizootia (0.15, p = 0.47)
+- efeito indireto da cobertura floresta, mediado pela fragmentação favorece a ocorrência de eízootia (-0.05)
+
+30%-60%
+- efeito direto da cobertura florestal favorece ocorrencia de epizootia (0.062, p = 0.78) 
+- efeito direto da fragmentação desfavorece ocorrencia de epizootia (-0.013, p = 0.94)
+- efeito indireto da cobertura floresta, mediado pela fragmentação também desfavorece a ocorrência de eízootia (-0.0006)
+
+> 60%
+- efeito direto da cobertura florestal desfavorece ocorrencia de epizootia (-0.10, p = 0.71) 
+- efeito direto da fragmentação favorece ocorrencia de epizootia (0.87, p = 0.28)
+- efeito indireto da cobertura floresta, mediado pela fragmentação também desfavorece a ocorrência de epizootia (-0.64)
+
+O resultado da análise conduzida em difrentes gradientes corroboram a hipótese de que acima de 60% de intensidade de cobertura vegetal um acréscimo na quantidade de habitat reduz as chances de ocorrências de eventos de epizootias, seja pelo seu efeito direto, seja pelo seu efeito mediado pela redução do grau de fragmentação.
+
+Uma implicação importante é que não se pode avaliar estratégias de conservação e manejo da paisagem sem levar em consideração a dimensão do risco de zoonoses. Mesmo que a fragmentação aumente níveis de biodiversidade, ela também eleva o risco de ocorrência de eventos de epizootia, especialmente em paisagens com menons de 30% e mais de 60%
+## Fragmentation measure - number of patches
+
+### Fit a partial mediation model - quadratic term
+
+
+```{r}
+partial_mediation_model4 <- psem(
+  glmmTMB(
+    formula = epizootic ~ n_patches1 + forest_cover1 + (1 | random),
+    data = data_np,
+    family = binomial(link = "logit")
+  ),
+  glmmTMB(
+    formula = n_patches1 ~ forest_cover1 + forest_cover2 + (1 | random) + exp(coords + 0 | group),
+    data = data_np,
+    family = "gaussian",
+    dispformula = ~ 0
+  ),
+  data = data_np
+)
+```
+
+```{r}
+summary(partial_mediation_model4)
+```
+
+```{r}
+grViz("digraph {
+
+graph [layout = dot, rankdir = LR]
+
+# define the global styles of the nodes. We can override these in box if we wish
+node [shape = ellipse, overlap = TRUE, shape = box, style = filled, fillcolor = YellowGreen]
+habitat2; habitat1; fragmentation; epizootic
+
+habitat2 [shape = ellipse, label =  'FC²', fontsize = 18, fontname = Serif, penwidth = 2, width = 2, height = 1]
+habitat1 [shape = ellipse, label =  'FC', fontsize = 18, fontname = Serif, penwidth = 2, width = 2, height = 1]
+fragmentation [shape = ellipse, label = 'NP \n R² = 0.75', fontsize = 18, fontname = Serif, penwidth = 2]
+epizootic [shape = ellipse, label= 'Epizootic event \n R² = 0.14 \n C = 6.757 p = 0.034', fontsize = 18, fontname = Serif, penwidth = 2]
+
+# define the global styles of the nodes 2.
+node [shape = box, overlap = TRUE, shape = box, fillcolor = White]
+coef_habitat3; coef_habitat2; coef_habitat1; coef_frag
+
+coef_habitat3 [label = '0.53 \n p < 0.0001', fontsize = 12, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
+coef_habitat2 [label = '-0.49 \n p < 0.0001', fontsize = 12, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
+coef_habitat1 [label = '0.55 \n p < 0.0001', fontsize = 12, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
+coef_frag[label = '0.73 \n p < 0.0001', fontsize = 12, fontname = Serif, fillcolor = White, penwidth = 0.5]
+
+# edge definitions with the node IDs
+habitat2 -> coef_habitat2[penwidth = 5, arrowhead = none, style = dashed, color = Red]
+coef_habitat2 -> fragmentation[penwidth = 5, style = dashed, color = Red]
+habitat1 -> coef_habitat1[penwidth = 5, arrowhead = none, color = Blue]
+coef_habitat1 -> fragmentation[penwidth = 5, color = Blue]
+fragmentation -> coef_frag[penwidth = 5, arrowhead = none, color = Blue]
+coef_frag -> epizootic[penwidth = 5, color = Blue]
+habitat1 -> coef_habitat3[penwidth = 5, arrowhead = none, color = Blue]
+coef_habitat3 -> epizootic[penwidth = 5, color = Blue]
+}")
+```
+
+## Evaluating different gradients of forest cover
+
+### Fragmentation measure - edge density
+
+#### Lower gradient - < 30% of forest cover
+
+
+
+```{r}
+partial_mediation_model_lower_gradient1 <- psem(
+  glmmTMB(
+    formula = epizootic ~ edge_density + forest_cover + (1 | random),
+    data = data_ed_lower_gradient,
+    family = binomial(link = "logit")
+  ),
+  glmmTMB(
+    formula = edge_density ~ forest_cover + (1 | random),
+    data = data_ed_lower_gradient,
+    family = "gaussian",
+    dispformula = ~ 0
+  ),
+  data = data_ed_lower_gradient
+)
+```
+
+```{r}
+summary(partial_mediation_model_lower_gradient1)
+```
+
+```{r, echo=FALSE}
+grViz("digraph {
+
+graph [layout = dot, rankdir = LR]
+
+# define the global styles of the nodes. We can override these in box if we wish
+node [shape = ellipse, overlap = TRUE, shape = box, style = filled, fillcolor = YellowGreen]
+habitat1; fragmentation; epizootic
+
+habitat1 [shape = ellipse, label =  'FC', fontsize = 18, fontname = Serif, penwidth = 2, width = 2, height = 1]
+fragmentation [shape = ellipse, label = 'ED \n R² = 0.87', fontsize = 18, fontname = Serif, penwidth = 2]
+epizootic [shape = ellipse, label= 'Epizootic event \n R² = 0.20 \n C = NA p = NA', fontsize = 18, fontname = Serif, penwidth = 2]
+
+# define the global styles of the nodes 2.
+node [shape = box, overlap = TRUE, shape = box, fillcolor = White]
+coef_habitat3; coef_habitat1; coef_frag; coef_frag2
+
+coef_habitat1 [label = '0.91 \n p < 0.0001', fontsize = 12, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
+coef_frag[label = '0.15 \n p = 0.47', fontsize = 12, fontname = Serif, fillcolor = White, penwidth = 0.5]
+coef_frag2[label = '0.05', fontsize = 12, fontname = Serif, fillcolor = White, penwidth = 0.5]
+coef_habitat3 [label = '0.35 \n p = 0.13', fontsize = 12, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
+
+# edge definitions with the node IDs
+habitat1 -> coef_habitat1[penwidth = 5, style = dotted, arrowhead = none, color = Gray]
+coef_habitat1 -> fragmentation[penwidth = 5, style = dotted, color = Gray]
+habitat1 -> coef_habitat1[penwidth = 5, arrowhead = none, color = Blue]
+coef_habitat1 -> fragmentation[penwidth = 5, color = Blue]
+fragmentation -> coef_frag[penwidth = 2.5, arrowhead = none, color = Gray]
+coef_frag -> epizootic[penwidth = 2.5, color = Gray]
+fragmentation -> coef_frag2[penwidth = 5, style = dotted, arrowhead = none, color = Gray]
+coef_frag2 -> epizootic[penwidth = 5, style = dotted, color = Gray]
+habitat1 -> coef_habitat3[penwidth = 2.5, arrowhead = none, color = LightGray]
+coef_habitat3 -> epizootic[penwidth = 2.5, color = Gray]
+}")
+
+```
+
+#### Middle gradient - 30%-60% of forest cover
+
+```{r, echo=FALSE}
+partial_mediation_model_middle_gradient1 <- psem(
+  glmmTMB(
+    formula = epizootic ~ edge_density + forest_cover + (1 | random),
+    data = data_ed_middle_gradient,
+    family = binomial(link = "logit"),
+    control = glmmTMBControl(
+      optimizer = optim, 
+    optArgs = list(
+      method = "BFGS"
+    )
+    )
+  ),
+  glmmTMB(
+    formula = edge_density ~ forest_cover + (1 | random),
+    data = data_ed_middle_gradient,
+    family = "gaussian",
+    dispformula = ~ 0
+  ),
+  data = data_ed_middle_gradient
+)
+```
+
+```{r}
+summary(partial_mediation_model_middle_gradient1)
+```
+
+```{r, echo=FALSE}
+grViz("digraph {
+
+graph [layout = dot, rankdir = LR]
+
+# define the global styles of the nodes. We can override these in box if we wish
+node [shape = ellipse, overlap = TRUE, shape = box, style = filled, fillcolor = YellowGreen]
+habitat1; fragmentation; epizootic
+
+habitat1 [shape = ellipse, label =  'FC', fontsize = 18, fontname = Serif, penwidth = 2, width = 2, height = 1]
+fragmentation [shape = ellipse, label = 'ED \n R² = 0', fontsize = 18, fontname = Serif, penwidth = 2]
+epizootic [shape = ellipse, label= 'Epizootic event \n R² = 0 \n C = NA p = NA', fontsize = 18, fontname = Serif, penwidth = 2]
+
+# define the global styles of the nodes 2.
+node [shape = box, overlap = TRUE, shape = box, fillcolor = White]
+coef_habitat3; coef_habitat1; coef_frag; coef_frag2
+
+coef_habitat1 [label = '0.005 \n p = 0.96', fontsize = 12, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
+coef_frag[label = '-0.013 \n p = 0.94', fontsize = 12, fontname = Serif, fillcolor = White, penwidth = 0.5]
+coef_frag2[label = '-0.0006', fontsize = 12, fontname = Serif, fillcolor = White, penwidth = 0.5]
+coef_habitat3 [label = '0.062 \n p = 0.78', fontsize = 12, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
+
+# edge definitions with the node IDs
+habitat1 -> coef_habitat1[penwidth = 5, style = dotted, arrowhead = none, color = Gray]
+coef_habitat1 -> fragmentation[penwidth = 5, style = dotted, color = Gray]
+habitat1 -> coef_habitat1[penwidth = 2.5, arrowhead = none, color = Gray]
+coef_habitat1 -> fragmentation[penwidth = 2.5, color = Gray]
+fragmentation -> coef_frag[penwidth = 2.5, style = dashed, arrowhead = none, color = Gray]
+coef_frag -> epizootic[penwidth = 2.5, style = dashed, color = Gray]
+fragmentation -> coef_frag2[penwidth = 5, style = dotted, arrowhead = none, color = Gray]
+coef_frag2 -> epizootic[penwidth = 5, style = dotted, color = Gray]
+habitat1 -> coef_habitat3[penwidth = 2.5, arrowhead = none, color = LightGray]
+coef_habitat3 -> epizootic[penwidth = 2.5, color = Gray]
+}")
+
+```
+
+#### Upper gradient - > 60% of forest cover
+
+```{r, echo=FALSE}
+partial_mediation_model_upper_gradient1 <- psem(
+  glmmTMB(
+    formula = epizootic ~ edge_density + forest_cover + (1 | random),
+    data = data_ed_upper_gradient,
+    family = binomial(link = "logit"),
+    control = glmmTMBControl(
+      optimizer = optim, 
+    optArgs = list(
+      method = "CG"
+    )
+    )
+  ),
+  glmmTMB(
+    formula = edge_density ~ forest_cover + (1 | random),
+    data = data_ed_upper_gradient,
+    family = "gaussian",
+    dispformula = ~ 0
+  ),
+  data = data_ed_upper_gradient
+)
+```
+
+```{r}
+summary(partial_mediation_model_upper_gradient1)
+```
+
+```{r, echo=FALSE}
+grViz("digraph {
+
+graph [layout = dot, rankdir = LR]
+
+# define the global styles of the nodes. We can override these in box if we wish
+node [shape = ellipse, overlap = TRUE, shape = box, style = filled, fillcolor = YellowGreen]
+habitat1; fragmentation; epizootic
+
+habitat1 [shape = ellipse, label =  'FC', fontsize = 18, fontname = Serif, penwidth = 2, width = 2, height = 1]
+fragmentation [shape = ellipse, label = 'ED \n R² = 0.52', fontsize = 18, fontname = Serif, penwidth = 2]
+epizootic [shape = ellipse, label= 'Epizootic event \n R² = 0.86 \n C = NA p = NA', fontsize = 18, fontname = Serif, penwidth = 2]
+
+# define the global styles of the nodes 2.
+node [shape = box, overlap = TRUE, shape = box, fillcolor = White]
+coef_habitat3; coef_habitat1; coef_frag; coef_frag2
+
+coef_habitat1 [label = '-0.74 \n p < 0.001', fontsize = 12, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
+coef_frag[label = '0.87 \n p = 0.28', fontsize = 12, fontname = Serif, fillcolor = White, penwidth = 0.5]
+coef_frag2[label = '-0.64', fontsize = 12, fontname = Serif, fillcolor = White, penwidth = 0.5]
+coef_habitat3 [label = '-0.10 \n p = 0.71', fontsize = 12, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
+
+# edge definitions with the node IDs
+habitat1 -> coef_habitat1[penwidth = 5, style = dotted, arrowhead = none, color = Gray]
+coef_habitat1 -> fragmentation[penwidth = 5, style = dotted, color = Gray]
+habitat1 -> coef_habitat1[penwidth = 5, style = dashed, arrowhead = none, color = Red]
+coef_habitat1 -> fragmentation[penwidth = 5, style = dashed, color = Red]
+fragmentation -> coef_frag[penwidth = 2.5, arrowhead = none, color = Gray]
+coef_frag -> epizootic[penwidth = 2.5, color = Gray]
+fragmentation -> coef_frag2[penwidth = 5, style = dotted, arrowhead = none, color = Gray]
+coef_frag2 -> epizootic[penwidth = 5, style = dotted, color = Gray]
+habitat1 -> coef_habitat3[penwidth = 2.5, style = dashed, arrowhead = none, color = LightGray]
+coef_habitat3 -> epizootic[penwidth = 2.5, style = dashed, color = Gray]
+}")
+
+```
+
+### Fragmentation measure - number of patches
+
+#### Lower gradient - < 30% of forest cover
+
+```{r}
+partial_mediation_model_lower_gradient2 <- psem(
+  glmmTMB(
+    formula = epizootic ~ n_patches + forest_cover + (1 | random),
+    data = data_np_lower_gradient,
+    family = binomial(link = "logit")
+  ),
+  glmmTMB(
+    formula = n_patches ~ forest_cover + (1 | random),
+    data = data_np_lower_gradient,
+    family = "gaussian",
+    dispformula = ~ 0
+  ),
+  data = data_np_lower_gradient
+)
+```
+
+```{r}
+summary(partial_mediation_model_lower_gradient2)
+```
+
+```{r}
+grViz("digraph {
+
+graph [layout = dot, rankdir = LR]
+
+# define the global styles of the nodes. We can override these in box if we wish
+node [shape = ellipse, overlap = TRUE, shape = box, style = filled, fillcolor = YellowGreen]
+habitat1; fragmentation; epizootic
+
+habitat1 [shape = ellipse, label =  'FC', fontsize = 18, fontname = Serif, penwidth = 2, width = 2, height = 1]
+fragmentation [shape = ellipse, label = 'NP \n R² = 0.54', fontsize = 18, fontname = Serif, penwidth = 2]
+epizootic [shape = ellipse, label= 'Epizootic event \n R² = 0.24 \n C = NA p = NA', fontsize = 18, fontname = Serif, penwidth = 2]
+
+# define the global styles of the nodes 2.
+node [shape = box, overlap = TRUE, shape = box, fillcolor = White]
+coef_habitat3; coef_habitat1; coef_frag; coef_frag2
+
+coef_habitat1 [label = '0.73 \n p < 0.0001', fontsize = 12, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
+coef_frag[label = '0.36 \n p < 0.05', fontsize = 12, fontname = Serif, fillcolor = White, penwidth = 0.5]
+coef_frag2[label = '0.26', fontsize = 12, fontname = Serif, fillcolor = White, penwidth = 0.5]
+coef_habitat3 [label = '0.23 \n p = 0.10', fontsize = 12, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
+
+# edge definitions with the node IDs
+habitat1 -> coef_habitat1[penwidth = 5, style = dotted, arrowhead = none, color = Gray]
+coef_habitat1 -> fragmentation[penwidth = 5, style = dotted, color = Gray]
+habitat1 -> coef_habitat1[penwidth = 5, arrowhead = none, color = Blue]
+coef_habitat1 -> fragmentation[penwidth = 5, color = Blue]
+fragmentation -> coef_frag[penwidth = 5, arrowhead = none, color = Blue]
+coef_frag -> epizootic[penwidth = 5, color = Blue]
+fragmentation -> coef_frag2[penwidth = 5, style = dotted, arrowhead = none, color = Gray]
+coef_frag2 -> epizootic[penwidth = 5, style = dotted, color = Gray]
+habitat1 -> coef_habitat3[penwidth = 2.5, arrowhead = none, color = LightGray]
+coef_habitat3 -> epizootic[penwidth = 2.5, color = Gray]
+}")
+```
+
+#### Middle gradient - 30%-60% of forest cover
+
+```{r}
+partial_mediation_model_middle_gradient2 <- psem(
+  glmmTMB(
+    formula = epizootic ~ n_patches + forest_cover + (1 | random),
+    data = data_np_middle_gradient,
+    family = binomial(link = "logit"),
+    control = glmmTMBControl(
+      optimizer = optim, 
+    optArgs = list(
+      method = "Nelder-Mead"
+    )
+    )
+  ),
+  glmmTMB(
+    formula = n_patches ~ forest_cover + (1 | random),
+    data = data_np_middle_gradient,
+    family = "gaussian",
+    dispformula = ~ 0
+  ),
+  data = data_np_middle_gradient
+)
+```
+
+```{r}
+summary(partial_mediation_model_middle_gradient2)
+```
+
+```{r}
+grViz("digraph {
+
+graph [layout = dot, rankdir = LR]
+
+# define the global styles of the nodes. We can override these in box if we wish
+node [shape = ellipse, overlap = TRUE, shape = box, style = filled, fillcolor = YellowGreen]
+habitat1; fragmentation; epizootic
+
+habitat1 [shape = ellipse, label =  'FC', fontsize = 18, fontname = Serif, penwidth = 2, width = 2, height = 1]
+fragmentation [shape = ellipse, label = 'NP \n R² = 0.07', fontsize = 18, fontname = Serif, penwidth = 2]
+epizootic [shape = ellipse, label= 'Epizootic event \n R² = 0 \n C = NA p = NA', fontsize = 18, fontname = Serif, penwidth = 2]
+
+# define the global styles of the nodes 2.
+node [shape = box, overlap = TRUE, shape = box, fillcolor = White]
+coef_habitat3; coef_habitat1; coef_frag; coef_frag2
+
+coef_habitat1 [label = '-0.26 \n p < 0.05', fontsize = 12, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
+coef_frag[label = '-0.032 \n p = 0.86', fontsize = 12, fontname = Serif, fillcolor = White, penwidth = 0.5]
+coef_frag2[label = '0.008', fontsize = 12, fontname = Serif, fillcolor = White, penwidth = 0.5]
+coef_habitat3 [label = '0.05 \n p = 0.83', fontsize = 12, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
+
+# edge definitions with the node IDs
+habitat1 -> coef_habitat1[penwidth = 5, style = dotted, arrowhead = none, color = Gray]
+coef_habitat1 -> fragmentation[penwidth = 5, style = dotted, color = Gray]
+habitat1 -> coef_habitat1[penwidth = 2.5, style = dashed, arrowhead = none, color = Red]
+coef_habitat1 -> fragmentation[penwidth = 2.5, style = dashed, color = Red]
+fragmentation -> coef_frag[penwidth = 2.5, style = dashed, arrowhead = none, color = Gray]
+coef_frag -> epizootic[penwidth = 2.5, style = dashed, color = Gray]
+fragmentation -> coef_frag2[penwidth = 5, style = dotted, arrowhead = none, color = Gray]
+coef_frag2 -> epizootic[penwidth = 5, style = dotted, color = Gray]
+habitat1 -> coef_habitat3[penwidth = 2.5, arrowhead = none, color = Gray]
+coef_habitat3 -> epizootic[penwidth = 2.5, color = Gray]
+}")
+```
+
+#### Upper gradient - > 60% of forest cover
+
+```{r}
+partial_mediation_model_upper_gradient2 <- psem(
+  glmmTMB(
+    formula = epizootic ~ n_patches + forest_cover + (1 | random),
+    data = data_np_upper_gradient,
+    family = binomial(link = "logit"),
+    control = glmmTMBControl(
+      optimizer = optim, 
+    optArgs = list(
+      method = "BFGS"
+    )
+    )
+  ),
+  glmmTMB(
+    formula = n_patches ~ forest_cover + (1 | random),
+    data = data_np_upper_gradient,
+    family = "gaussian",
+    dispformula = ~ 0
+  ),
+  data = data_np_upper_gradient
+)
+```
+
+```{r}
+summary(partial_mediation_model_upper_gradient2)
+```
+
+```{r}
+grViz("digraph {
+
+graph [layout = dot, rankdir = LR]
+
+# define the global styles of the nodes. We can override these in box if we wish
+node [shape = ellipse, overlap = TRUE, shape = box, style = filled, fillcolor = YellowGreen]
+habitat1; fragmentation; epizootic
+
+habitat1 [shape = ellipse, label =  'FC', fontsize = 18, fontname = Serif, penwidth = 2, width = 2, height = 1]
+fragmentation [shape = ellipse, label = 'NP \n R² = 0.17', fontsize = 18, fontname = Serif, penwidth = 2]
+epizootic [shape = ellipse, label= 'Epizootic event \n R² = 0.07 \n C = NA p = NA', fontsize = 18, fontname = Serif, penwidth = 2]
+
+# define the global styles of the nodes 2.
+node [shape = box, overlap = TRUE, shape = box, fillcolor = White]
+coef_habitat3; coef_habitat1; coef_frag; coef_frag2
+
+coef_habitat1 [label = '-0.42 \n p = 0.066', fontsize = 12, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
+coef_frag[label = '0.70 \n p = 0.98', fontsize = 12, fontname = Serif, fillcolor = White, penwidth = 0.5]
+coef_frag2[label = '-0.29', fontsize = 12, fontname = Serif, fillcolor = White, penwidth = 0.5]
+coef_habitat3 [label = '-0.17 \n p = 0.70', fontsize = 12, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
+
+# edge definitions with the node IDs
+habitat1 -> coef_habitat1[penwidth = 5, style = dotted, arrowhead = none, color = Gray]
+coef_habitat1 -> fragmentation[penwidth = 5, style = dotted, color = Gray]
+habitat1 -> coef_habitat1[penwidth = 5, style = dashed, arrowhead = none, color = Gray]
+coef_habitat1 -> fragmentation[penwidth = 5, style = dashed, color = Gray]
+fragmentation -> coef_frag[penwidth = 2.5, arrowhead = none, color = Gray]
+coef_frag -> epizootic[penwidth = 2.5, color = Gray]
+fragmentation -> coef_frag2[penwidth = 5, style = dotted, arrowhead = none, color = Gray]
+coef_frag2 -> epizootic[penwidth = 5, style = dotted, color = Gray]
+habitat1 -> coef_habitat3[penwidth = 2.5, style = dashed, arrowhead = none, color = LightGray]
+coef_habitat3 -> epizootic[penwidth = 2.5, style = dashed, color = Gray]
+}")
+```
