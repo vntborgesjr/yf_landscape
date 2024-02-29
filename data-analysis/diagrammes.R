@@ -35,12 +35,16 @@ epizootic [shape = ellipse, label= 'Epizootic event \n R² = 0.14 \n C = 6.735 p
 node [shape = box, overlap = TRUE, shape = box, fillcolor = White]
 coef_habitat3; coef_habitat2; coef_habitat1; coef_frag
 
+coef_habitat4 [label = '-0.39', fontsize = 18, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
 coef_habitat3 [label = '0.21 \n p = 0.05', fontsize = 18, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
 coef_habitat2 [label = '-0.56 \n p < 0.0001', fontsize = 18, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
 coef_habitat1 [label = '0.74 \n p < 0.0001', fontsize = 18, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
 coef_frag[label = '0.94 \n p = 0.01', fontsize = 18, fontname = Serif, fillcolor = White, penwidth = 0.5]
 
 # edge definitions with the node IDs
+habitat1 -> habitat2[penwidth = 5, style = dotted, color = Gray] 
+habitat2 -> coef_habitat4[penwidth = 5, style = dotted, color = Gray]
+coef_habitat4 -> epizootic[penwidth = 5, style = dotted, color = Gray]
 habitat2 -> coef_habitat2[penwidth = 5, arrowhead = none, style = dashed, color = Red]
 coef_habitat2 -> fragmentation[penwidth = 5, style = dashed, color = Red]
 habitat1 -> coef_habitat1[penwidth = 5, arrowhead = none, color = Blue]
@@ -80,12 +84,16 @@ epizootic [shape = ellipse, label= 'Epizootic event \n R² = 0.14 \n C = 6.757 p
 node [shape = box, overlap = TRUE, shape = box, fillcolor = White]
 coef_habitat3; coef_habitat2; coef_habitat1; coef_frag
 
+coef_habitat4 [label = '-0.20', fontsize = 18, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
 coef_habitat3 [label = '0.53 \n p < 0.0001', fontsize = 18, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
 coef_habitat2 [label = '-0.49 \n p < 0.0001', fontsize = 18, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
 coef_habitat1 [label = '0.55 \n p < 0.0001', fontsize = 18, fontname = Serif, face = Bold, fillcolor = White, penwidth = 0.5]
 coef_frag[label = '0.73 \n p < 0.0001', fontsize = 18, fontname = Serif, fillcolor = White, penwidth = 0.5]
 
 # edge definitions with the node IDs
+habitat1 -> habitat2[penwidth = 5, style = dotted, color = Gray] 
+habitat2 -> coef_habitat4[penwidth = 5, style = dotted, color = Gray]
+coef_habitat4 -> epizootic[penwidth = 5, style = dotted, color = Gray]
 habitat2 -> coef_habitat2[penwidth = 5, arrowhead = none, style = dashed, color = Red]
 coef_habitat2 -> fragmentation[penwidth = 5, style = dashed, color = Red]
 habitat1 -> coef_habitat1[penwidth = 5, arrowhead = none, color = Blue]
@@ -95,7 +103,7 @@ coef_frag -> epizootic[penwidth = 5, color = Blue]
 habitat1 -> coef_habitat3[penwidth = 5, arrowhead = none, color = Blue]
 coef_habitat3 -> epizootic[penwidth = 5, color = Blue]
 }")
-n_patches_diagramme
+
 # Partial gradient of forest cover - < 30% ---------------------------
 
 # Fragmentation measure - edge density -------------------------------
