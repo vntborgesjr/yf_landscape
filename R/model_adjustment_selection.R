@@ -4,10 +4,11 @@ model_adjustment_selection <- function(
     FUN,
     family,
     rank = NULL,
-    beta = "none"
+    beta = "none",
+    dispformula = ~ 0
   ) {
   
-  # create the object to receivve the models
+  # create the object to receive the models
   models_results <- list()
   
   # fit the set of models
@@ -16,7 +17,8 @@ model_adjustment_selection <- function(
       \(.x) glmmTMB::glmmTMB(
         formula = .x,
         data = data,
-        family = family
+        family = family,
+        dispformula = dispformula
       )
     )
     
