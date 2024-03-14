@@ -1,0 +1,177 @@
+---
+title: "Untitled"
+author: "Vitor Borges"
+date: "2024-02-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# load packages
+library(lavaan)
+library(piecewiseSEM)
+
+# load data
+load(here::here("ep_landscape_metrics_transformed.RData"))
+# global variance-covariance matrix
+data_ed <- data.frame(
+  y2 = ep_landscape_metrics_transformed$status,
+  y1 = ep_landscape_metrics_transformed$ed200,
+  x1 = ep_landscape_metrics_transformed$pland200
+)
+
+data_np <- data.frame(
+  y2 = ep_landscape_metrics_transformed$status,
+  y1 = ep_landscape_metrics_transformed$np200,
+  x1 = ep_landscape_metrics_transformed$pland200
+)
+```
+
+## Structural equation modeling
+
+### lavaan vs lm
+
+The objective is to understand the patterns of occurrence of epizootic events of yellow fever in monkeys in response to habitat amount and habitat fragmentation.
+
+Lets consider the relationship between habitat amount and habitat fragmentation.
+
+habitat amount -> habitat fragmentation (boxes)
+
+First it is necessary to break down the component models by the endogenous (response) variables.
+
+```{r}
+fm_formula <- "y1 ~ x1"
+```
+
+Than fit the model using the function `sem()`.
+
+```{r}
+sem1 <- sem(
+  model = fm_formula,
+  data = data_ed
+)
+```
+
+```{r}
+summary(
+  object = sem1,
+  standardize = TRUE
+)
+```
+
+The output is organized into a few sections. First is the likelihood optimization method, number of parameters, the total sample size for the model, the estimator (FML is the default) and the fit statistic. The model has χ2=0 with 0 degrees of freedom: this is because we have as many knowns as unknowns, and thus the model is just identified or saturated. To show this, we can apply the t-rule: we must estimate the two variances of the variables plus their path coefficient (t=3) and know the values of the two variables (n=2). Recall the equation for the t-rule t≤n(n+1)/2, so 3=2(2+1)/2=6/2=3, and therefore the model is saturated.
+
+Next up are the actual parameter estimates: the relationship between fire severity and stand age is β= `r coefs(lm(fm_formula, data_ed))[, 3]` with P < 0.001. The model also reports the estimated error variance on the endogenous variable.
+
+```{r}
+# return R squared
+summary(
+  sem1,
+  standardize = TRUE,
+  rsq = TRUE
+)
+```
+
+## SEM using lavaan
+
+Lets test the hypothesis that epizootic events are affected by habitat fragmentation, which in turn is influenced by habitat amount. This test is known as full mediation. In other words, the effect of habitat amount is fully mediated by habitat fragmentation.
+
+habitat amount -> habitat fragmentation -> epizooties
+
+Again, we must provide the formulae as a character string. This model can be broken down into two equations (placed on separate lines) representing the two endogenous variables:
+
+```{r}
+fm_formula2 <- "
+  y1 ~ x1
+  y2 ~ y1
+"
+```
+
+```{r}
+sem2 <- sem(
+  model = fm_formula2,
+  data = data_ed
+)
+
+summary(
+  object = sem2,
+  standardize = TRUE,
+  rsq = TRUE
+)
+```
+
+We failed to reject the null that the observed and model-implied variance-covariance matrices are not significantly different (P=0.005)
+ 
+```{r}
+fitmeasures(sem2)
+```
+
+Now that we have multiple linkages, we can also compute the indirect effect of age on cover. We can obtain this value by modifying the model formula to include these calculations directly. This involves giving a name to the coefficients in the model strings, then adding a new line indicating their product using the operator `:=`.
+
+```{r}
+fm_formula3 <- "
+  # define direct effects
+  y1 ~ b1*x1
+  y2 ~ b2*y1
+  
+  # define indirect effects
+  indirect := b1*b2
+"
+```
+
+```{r}
+sem3 <- sem(
+  model = fm_formula3,
+  data = data_ed
+)
+
+summary(
+  object = sem3,
+  standardize = TRUE,
+  rsq = TRUE
+)
+```
+
+### Adding direct effect fo habitat amount
+
+There is another possible configuration of these variables which includes a directed path between habitat amount and epizootic events:
+
+BOXES
+
+This type of model tests partial mediation, or the idea that the effect of hbaitat amount is partially mediated by habitat fragmentation, but there is still a direct effect between habitat amount and epizootic events.
+
+```{r}
+fm_formula4 <- '
+y1 ~ x1
+y2 ~ x1 + y1
+'
+
+sem4 <- sem(
+  model = fm_formula4, 
+  data = data_ed
+)
+
+summary(
+  object = sem4, 
+  standardize = TRUE
+)
+```
+
+Ah, we have a problem: the model is saturated, so there are no degrees of freedom leftover with which to test model fit.
+
+We can, however, use the χ2
+test to determine whether this model is more or less supported than the partial mediation model, which is called using the function `anova()`:
+
+```{r}
+anova(sem3, sem4)
+```
+
+We can see from this output that the models are significantly different (P=0.00463). Because these are nested models, it is also fair to compare them using AIC/BIC. The partial mediation model would be preferred. These pieces of information would suggest that epizootic events is directly and positively affected by habitat amount, partialy mediated through the degree of fragmentation. Landscapes with high leves of forest cover and fragmentation are those that holds the largest probailities of occurrence of epizootic events.
+
+## Model fitting using piecewiseSEM
+
+
+
+
+
